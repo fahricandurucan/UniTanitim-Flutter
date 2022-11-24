@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "771130799961",
+    "project_id": "uni-project-f6db7",
+    "storage_bucket": "uni-project-f6db7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771130799961:android:45e0ae473fad260b9e3e48",
+        "android_client_info": {
+          "package_name": "com.example.uni_tanitim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771130799961-59l2f10p8fe4oaa61o3sn2e01otrh14v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAI3FKkionEgpMr_-5Ssno8_EeVLvsWYK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771130799961-59l2f10p8fe4oaa61o3sn2e01otrh14v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "771130799961-1rl8v6nunl05dn2guq4dhghifjn1o299.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.uniTanitim"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>771130799961-1rl8v6nunl05dn2guq4dhghifjn1o299.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.771130799961-1rl8v6nunl05dn2guq4dhghifjn1o299</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPACADLsrWIY1H-Wd2AAAKuW2HoUp_L6M</string>
+	<key>GCM_SENDER_ID</key>
+	<string>771130799961</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.uniTanitim</string>
+	<key>PROJECT_ID</key>
+	<string>uni-project-f6db7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>uni-project-f6db7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:771130799961:ios:210c83d3ee49ca779e3e48</string>
+</dict>
+</plist>
