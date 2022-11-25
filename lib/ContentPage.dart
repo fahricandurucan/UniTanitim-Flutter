@@ -12,8 +12,10 @@ import 'FirebaseOperations .dart';
 
 class ContentPage extends StatelessWidget {
   late   List<dynamic> contents;
+  late String coverImage;
+  late String categoryName;
 
-  ContentPage({required this.contents});
+  ContentPage({required this.contents,required this.coverImage,required this.categoryName}) ;
 
 
   FirebaseOperations firebaseOperations = FirebaseOperations();
@@ -32,7 +34,7 @@ class ContentPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Flexible(child: Text(contents[0]["image"], style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
+                Flexible(child: Text(categoryName, style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
 
                 Container(
                   margin: EdgeInsets.only(top: 7,bottom: 7,left: 15),
@@ -65,7 +67,7 @@ class ContentPage extends StatelessWidget {
                       Container(
                           height:250,
                           width: width,
-                          child:Image.network(contents[0]["image"],fit: BoxFit.cover,)),
+                          child:Image.network(coverImage,fit: BoxFit.cover,)),
                       Row(
                         children: [
                           Flexible(child: GestureDetector(
@@ -108,7 +110,7 @@ class ContentPage extends StatelessWidget {
                     width: double.infinity,
                     decoration: BoxDecoration(color: Color(0xffececec), borderRadius: BorderRadius.vertical(bottom: Radius.circular(18))),
                     child: ContentWidget(content: contents[0]["content"],
-                      imageLink:"https://cdn1.ntv.com.tr/gorsel/ks_hXXjQy0-_BVNgNraKdw.jpg?width=1000&mode=both&scale=both&v=1587280799431" ,
+                      imageLink:contents[0]["image"] ,
                       title: contents[0]["title"],
                     ),
                   ),

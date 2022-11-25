@@ -9,7 +9,8 @@ import 'models/Content.dart';
 import 'models/HomeCategoryContents.dart';
 
 class CategoryPage extends StatefulWidget {
-
+  late String title;
+  CategoryPage({required this.title});
 
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -36,6 +37,9 @@ class _CategoryPageState extends State<CategoryPage> {
 
 
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,61 +48,69 @@ class _CategoryPageState extends State<CategoryPage> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.black,
-          title: Text("KAMPÜS",style: TextStyle(fontSize: 24),),
+          title: Text(widget.title,style: TextStyle(fontSize: 24),),
         ),
 
-        body: FutureBuilder(
-          future: firestore.getPlaceUni(),
-          builder: (context,AsyncSnapshot snapshot){
-            if(snapshot.hasData){
-              return ListView(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text("Fakülteler",style: TextStyle(fontSize: 18,color: Colors.white),),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 15),
-                    child: Container(
-                      height: 300,
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          //for(var i in resimler())
-                          for(var i in snapshot.data)
-                            Fakuteler(i["categoryName"],i["description"],i["image"],i["contents"]),
-                        ],
+        body: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text("Fakülteler",style: TextStyle(fontSize: 18,color: Colors.white),),
+            ),
+
+            FutureBuilder(
+                future: firestore.getPlaceUni(title : widget.title),
+                builder: (context,AsyncSnapshot snapshot){
+                  if(snapshot.hasData){
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                      child: Container(
+                        height: 300,
+                        child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            //for(var i in resimler())
+                            for(var i in snapshot.data)
+                              Fakuteler(i["categoryName"],i["description"],i["image"],i["contents"]),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15,bottom: 15),
-                    child: Text("Diger",style: TextStyle(fontSize: 18,color: Colors.white),),
-                  ),
-                  Container(
-                    height: 300,
-                    child:
-                    Diger(),
-                  ),
-                  ElevatedButton(
-                    onPressed: (){
-                      setState(() {
-                        Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
-                        Content content2 = Content(content: "içerik 2",title: "başlık 2", image: "resim2");
-                        HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Fen-Edebiyat Fakültesi", contents: [content1.toMap(),content2.toMap()], description: "fen-edebiyat açıklama...", image: "https://docs.kariyer.net/job/jobtemplate/000/000/223/avatar/22353420200707061403281.png", universityId: "uniID3");
-                        // firestore.addData(homeCategoryContent);
-                      });
-                    },
-                    child: Text("EKLE"),
-                  ),
-                ],
-              );
-            }
-            else{
-              return Center();
-            }
-          },
+                    );
+                  }
+                  else{
+                    return Center();
+                  }
+                }
+            ),
+
+            Padding(
+              padding: EdgeInsets.only(left: 15,bottom: 15),
+              child: Text("Diger",style: TextStyle(fontSize: 18,color: Colors.white),),
+            ),
+            Container(
+              height: 300,
+              child:
+              FutureBuilder(
+                  future: firestore.getPlaceDiger(title: widget.title),
+                  builder: (context, AsyncSnapshot snapshot){
+                    return Diger(snapshot.data[0]["categoryName"]);
+                  }
+              ),
+
+            ),
+            ElevatedButton(
+              onPressed: (){
+                setState(() {
+                  Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
+                  HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Yemekhane", contents: [content1.toMap()], description: "",
+                      image: "", universityId: "",title: widget.title);
+                  firestore.addDiger(homeCategoryContent);
+                });
+              },
+              child: Text("EKLE"),
+            ),
+          ],
         ),
       ),
     );
@@ -163,7 +175,7 @@ class Fakuteler extends StatelessWidget {
                 // color: Colors.pink,
                 child: ElevatedButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: contents,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: contents,coverImage: image,categoryName: title,)));
                   },
                   child: Text("KEŞFET"),
                   style: ElevatedButton.styleFrom(
@@ -183,10 +195,14 @@ class Diger extends StatelessWidget {
   List<Color> colorList= [Color(0xffffe500),Color(0xffd60061),Color(0xff008feb),Color(0xffdbdbdb),Color(0xff00bb50),Color(0xffff8a00)];
   List<String> places= ["Yemekhane","Gençlik Merkezleri","Kütüphane","Kültür Merkezi","Kantinler","Diğer"];
 
+  late String categoryName;
+
+  Diger(this.categoryName);
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        itemCount: places.length,
+        itemCount: 2,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           childAspectRatio:1,
@@ -203,7 +219,7 @@ class Diger extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
               ),
-              Text(places[indeks],style: TextStyle(fontSize: 14,color: Colors.white),),
+              Text(categoryName,style: TextStyle(fontSize: 14,color: Colors.white),),
             ],
           );
         }
