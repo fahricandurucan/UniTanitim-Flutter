@@ -94,7 +94,7 @@ class _CategoryPageState extends State<CategoryPage> {
               FutureBuilder(
                   future: firestore.getPlaceDiger(title: widget.title),
                   builder: (context, AsyncSnapshot snapshot){
-                    return Diger(snapshot.data[0]["categoryName"]);
+                    return Diger(snapshot.data); //diger kısmı eklemek için yapıldı
                   }
               ),
 
@@ -103,9 +103,9 @@ class _CategoryPageState extends State<CategoryPage> {
               onPressed: (){
                 setState(() {
                   Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
-                  HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Yemekhane", contents: [content1.toMap()], description: "",
-                      image: "", universityId: "",title: widget.title);
-                  firestore.addDiger(homeCategoryContent);
+                  HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Özel Residorm", contents: [content1.toMap()], description: "residorm açıklama...",
+                      image: "http://yonetim.mu.edu.tr/Icerik/Sayfa/basin.mu.edu.tr/residormyeni.png", universityId: "",title: widget.title);
+                  firestore.addData(homeCategoryContent);
                 });
               },
               child: Text("EKLE"),
@@ -194,15 +194,19 @@ class Fakuteler extends StatelessWidget {
 class Diger extends StatelessWidget {
   List<Color> colorList= [Color(0xffffe500),Color(0xffd60061),Color(0xff008feb),Color(0xffdbdbdb),Color(0xff00bb50),Color(0xffff8a00)];
   List<String> places= ["Yemekhane","Gençlik Merkezleri","Kütüphane","Kültür Merkezi","Kantinler","Diğer"];
+  List assetImages = ["yemekhane2.png","genclikMerkezi.png","kutuphane.png",
+    "kulturMerkezi.png","kantin.png","diger.png"]; //kampüs sayfasınde diger kısım eklenirken kullanıldı
 
-  late String categoryName;
 
-  Diger(this.categoryName);
+
+  late List digerList;
+
+  Diger(this.digerList);
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        itemCount: 2,
+        itemCount: digerList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           childAspectRatio:1,
@@ -211,15 +215,30 @@ class Diger extends StatelessWidget {
         itemBuilder: (context,indeks){
           return Column(
             children: [
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: colorList[indeks],
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: colorList[indeks],
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                  Container(
+                    height: 70,
+                    width: 70,
+                    child:
+                    digerList[indeks]["title"] =="Kampüs" ?
+                    Image.asset(assetImages[indeks],fit: BoxFit.cover,)
+                        :
+                    Image.asset("placeholder.png",fit: BoxFit.cover,)
+
+                  ),
+                ],
               ),
-              Text(categoryName,style: TextStyle(fontSize: 14,color: Colors.white),),
+              Text(digerList[indeks]["categoryName"],style: TextStyle(fontSize: 14,color: Colors.white),),
             ],
           );
         }

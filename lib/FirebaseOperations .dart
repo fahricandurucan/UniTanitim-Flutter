@@ -48,13 +48,13 @@ class FirebaseOperations{
 
   Future<List> getPlaceDiger({required String title}) async{
     var placeDocuments =await firestore.collection("homeCategoryDiger").get();
-    // List result = [];
-    // for (var i in placeDocuments.docs){
-    //   if(i.data()["title"] == title){
-    //     result.add(i);
-    //   }
-    // }
-    return placeDocuments.docs;
+    List result = [];
+    for (var i in placeDocuments.docs){
+      if(i.data()["title"] == title){
+        result.add(i);
+      }
+    }
+    return result;
   }
 
   Future<void> addDiger(HomeCategoryContents homeCategoryContents) async{
