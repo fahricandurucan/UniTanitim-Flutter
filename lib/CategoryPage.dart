@@ -72,7 +72,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           children: [
                             //for(var i in resimler())
                             for(var i in snapshot.data)
-                              Fakuteler(i["categoryName"],i["description"],i["image"],i["contents"]),
+                              Fakuteler(i["categoryName"],i["description"],i["image"],i["contents"],i["galeriImage"]),
                           ],
                         ),
                       ),
@@ -104,7 +104,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 setState(() {
                   Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
                   HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Özel Residorm", contents: [content1.toMap()], description: "residorm açıklama...",
-                      image: "http://yonetim.mu.edu.tr/Icerik/Sayfa/basin.mu.edu.tr/residormyeni.png", universityId: "",title: widget.title);
+                      image: "http://yonetim.mu.edu.tr/Icerik/Sayfa/basin.mu.edu.tr/residormyeni.png", universityId: "",title: widget.title, galeriImage: []);
                   firestore.addData(homeCategoryContent);
                 });
               },
@@ -124,7 +124,8 @@ class Fakuteler extends StatelessWidget {
   String description;
   String image;
   List<dynamic> contents;
-  Fakuteler(this.title,this.description,this.image,this.contents);
+  List<dynamic> galeriImage;
+  Fakuteler(this.title,this.description,this.image,this.contents,this.galeriImage);
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +176,8 @@ class Fakuteler extends StatelessWidget {
                 // color: Colors.pink,
                 child: ElevatedButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: contents,coverImage: image,categoryName: title,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: contents,coverImage: image,
+                      categoryName: title, galeriImage: galeriImage,)));
                   },
                   child: Text("KEŞFET"),
                   style: ElevatedButton.styleFrom(
@@ -217,7 +219,7 @@ class Diger extends StatelessWidget {
               GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: digerList[indeks]["contents"],
-                      coverImage: digerList[indeks]["image"], categoryName: digerList[indeks]["title"])));
+                      coverImage: digerList[indeks]["image"], categoryName: digerList[indeks]["title"], galeriImage: digerList[indeks]["galeriImage"],)));
                 },
                 child: Stack(
                   alignment: Alignment.center,

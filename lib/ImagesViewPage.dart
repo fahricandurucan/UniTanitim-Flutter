@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ImageViewPage extends StatelessWidget {
-  const ImageViewPage({Key? key}) : super(key: key);
+
+  late List<dynamic> galeriImage;
+
+  ImageViewPage({required this.galeriImage});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +27,12 @@ class ImageViewPage extends StatelessWidget {
                       childAspectRatio: 3/2.5,
                       crossAxisSpacing: 15,
                     ),
-                    itemCount: 15,
+                    itemCount: galeriImage.length,
                     itemBuilder: (context, index) {
                       return Stack(
                         alignment: Alignment.bottomCenter,
                         children: [
-                          Image.network("https://cdn1.ntv.com.tr/gorsel/6BjUUb14Bke-kYHi8i5SgA.jpg?width=990&height=730&mode=crop&scale=both&v=20200419071959431",fit: BoxFit.cover,),
+                          Image.network(galeriImage[index],fit: BoxFit.cover,),
                           Text("shfsudfg",style: TextStyle(fontSize: 16,  decoration: TextDecoration.none, color: Colors.black)),
                         ],
                       );

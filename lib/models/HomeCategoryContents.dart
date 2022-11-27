@@ -8,9 +8,10 @@ class HomeCategoryContents{
   String image;
   String universityId;
   String title;
+  List<dynamic> galeriImage;
 
   HomeCategoryContents({required this.categoryName, required this.contents,
-    required this.description,required this.image,required this.universityId,required this.title});
+    required this.description,required this.image,required this.universityId,required this.title,required this.galeriImage});
 
   Map<String, dynamic> toMap() {
     return {
@@ -20,6 +21,7 @@ class HomeCategoryContents{
       'image': this.image,
       'universityId': this.universityId,
       'title': this.title,
+      'galeriImage': this.galeriImage,
     };
   }
   Map<String, dynamic> toMapDiger() {
@@ -28,6 +30,7 @@ class HomeCategoryContents{
       'contents': this.contents,
       'image': this.image,
       'title': this.title,
+      'galeriImage': this.galeriImage,
 
     };
   }
@@ -40,6 +43,8 @@ class HomeCategoryContents{
       image: map['image'],
       universityId: map['universityId'],
       title: map['title'],
+      galeriImage: map['galeriImage'],
+
     );
   }
 }

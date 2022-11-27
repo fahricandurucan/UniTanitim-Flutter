@@ -14,8 +14,9 @@ class ContentPage extends StatelessWidget {
   late   List<dynamic> contents;
   late String coverImage;
   late String categoryName;
+  late List<dynamic> galeriImage;
 
-  ContentPage({required this.contents,required this.coverImage,required this.categoryName}) ;
+  ContentPage({required this.contents,required this.coverImage,required this.categoryName,required this.galeriImage}) ;
 
 
   FirebaseOperations firebaseOperations = FirebaseOperations();
@@ -87,7 +88,7 @@ class ContentPage extends StatelessWidget {
                           ),
                           Flexible(child: GestureDetector(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: galeriImage,)));
                             },
                             child: Container(
                               height: 45,
