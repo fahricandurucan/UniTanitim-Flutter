@@ -198,7 +198,6 @@ class Diger extends StatelessWidget {
     "kulturMerkezi.png","kantin.png","diger.png"]; //kampüs sayfasınde diger kısım eklenirken kullanıldı
 
 
-
   late List digerList;
 
   Diger(this.digerList);
@@ -215,28 +214,34 @@ class Diger extends StatelessWidget {
         itemBuilder: (context,indeks){
           return Column(
             children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: colorList[indeks],
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: digerList[indeks]["contents"],
+                      coverImage: digerList[indeks]["image"], categoryName: digerList[indeks]["title"])));
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: colorList[indeks],
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 70,
-                    width: 70,
-                    child:
-                    digerList[indeks]["title"] =="Kampüs" ?
-                    Image.asset(assetImages[indeks],fit: BoxFit.cover,)
-                        :
-                    Image.asset("placeholder.png",fit: BoxFit.cover,)
+                    Container(
+                        height: 70,
+                        width: 70,
+                        child:
+                        digerList[indeks]["title"] =="Kampüs" ?
+                        Image.asset(assetImages[indeks],fit: BoxFit.cover,)
+                            :
+                        Image.asset("placeholder.png",fit: BoxFit.cover,)
 
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
               Text(digerList[indeks]["categoryName"],style: TextStyle(fontSize: 14,color: Colors.white),),
             ],
