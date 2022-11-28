@@ -10,7 +10,8 @@ import 'models/HomeCategoryContents.dart';
 
 class CategoryPage extends StatefulWidget {
   late String title;
-  CategoryPage({required this.title});
+  late String subtitle;
+  CategoryPage({required this.title,required this.subtitle});
 
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -55,7 +56,7 @@ class _CategoryPageState extends State<CategoryPage> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 15),
-              child: Text("Fakülteler",style: TextStyle(fontSize: 18,color: Colors.white),),
+              child: Text(widget.subtitle,style: TextStyle(fontSize: 18,color: Colors.white),),
             ),
 
             FutureBuilder(

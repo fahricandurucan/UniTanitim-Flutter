@@ -35,7 +35,7 @@ class Homepage extends StatelessWidget {
                       for(int i=0; i<snapshot.data.length; i++)
                         GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage(title: snapshot.data[i]["title"],)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage(title: snapshot.data[i]["title"], subtitle: snapshot.data[i]["subtitle"],)));
                           },
                           child: Container(
                             height: 150,

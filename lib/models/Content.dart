@@ -10,6 +10,7 @@ class Content{
       'title': this.title,
       'content': this.content,
       'image': this.image,
+
     };
   }
 

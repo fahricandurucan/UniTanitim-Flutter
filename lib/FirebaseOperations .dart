@@ -12,8 +12,8 @@ class FirebaseOperations{
     return userDocument.docs;
   }
 
-  Future<void> insertCategory(String categoryDesc, String categoryImage, String categoryName, String universityId) async{
-    InitCategory category = InitCategory(categoryName: categoryName, categoryDesc: categoryDesc, categoryImage: categoryImage, universityId: universityId);
+  Future<void> insertCategory(String categoryDesc, String categoryImage, String categoryName, String universityId,String subtitle) async{
+    InitCategory category = InitCategory(categoryName: categoryName, categoryDesc: categoryDesc, categoryImage: categoryImage, universityId: universityId, subtitle: subtitle);
     await firestore.collection("initCategories").add(category.toMap());
   }
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getHomeCategories()async{

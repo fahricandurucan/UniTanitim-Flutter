@@ -11,7 +11,8 @@ class HomeCategoryContents{
   List<dynamic> galeriImage;
 
   HomeCategoryContents({required this.categoryName, required this.contents,
-    required this.description,required this.image,required this.universityId,required this.title,required this.galeriImage});
+    required this.description,required this.image,required this.universityId,
+    required this.title,required this.galeriImage});
 
   Map<String, dynamic> toMap() {
     return {
