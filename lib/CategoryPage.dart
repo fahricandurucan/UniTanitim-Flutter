@@ -95,22 +95,27 @@ class _CategoryPageState extends State<CategoryPage> {
               FutureBuilder(
                   future: firestore.getPlaceDiger(title: widget.title),
                   builder: (context, AsyncSnapshot snapshot){
-                    return Diger(snapshot.data); //diger kısmı eklemek için yapıldı
+                    if(snapshot.hasData){
+                      return Diger(snapshot.data); //diger kısmı eklemek için yapıldı
+                    }
+                    else{
+                      return Center();
+                    }
                   }
               ),
 
             ),
-            ElevatedButton(
-              onPressed: (){
-                setState(() {
-                  Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
-                  HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Özel Residorm", contents: [content1.toMap()], description: "residorm açıklama...",
-                      image: "http://yonetim.mu.edu.tr/Icerik/Sayfa/basin.mu.edu.tr/residormyeni.png", universityId: "",title: widget.title, galeriImage: []);
-                  firestore.addData(homeCategoryContent);
-                });
-              },
-              child: Text("EKLE"),
-            ),
+            // ElevatedButton(
+            //   onPressed: (){
+            //     setState(() {
+            //       Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
+            //       HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Özel Residorm", contents: [content1.toMap()], description: "residorm açıklama...",
+            //           image: "http://yonetim.mu.edu.tr/Icerik/Sayfa/basin.mu.edu.tr/residormyeni.png", universityId: "",title: widget.title, galeriImage: []);
+            //       firestore.addData(homeCategoryContent);
+            //     });
+            //   },
+            //   child: Text("EKLE"),
+            // ),
           ],
         ),
       ),
@@ -137,7 +142,7 @@ class Fakuteler extends StatelessWidget {
           // color: Colors.yellow,
           margin: EdgeInsets.all(8),
           width: 180,
-          height: 230,
+          height: 270,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.network(image, fit: BoxFit.cover, color: Colors.white.withOpacity(0.5), colorBlendMode: BlendMode.modulate,),
@@ -165,7 +170,7 @@ class Fakuteler extends StatelessWidget {
           ],
         ),
         Container(
-          margin: EdgeInsets.only(top: 200),
+          margin: EdgeInsets.only(top: 240),
           height: 100,
           width: 100,
           // color: Colors.greenAccent,
@@ -182,7 +187,7 @@ class Fakuteler extends StatelessWidget {
                   },
                   child: Text("KEŞFET"),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.deepPurple
+                    primary: Color(0x954800B1),
                   ),
                 ),
               ),

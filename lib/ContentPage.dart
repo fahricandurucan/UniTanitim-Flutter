@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uni_tanitim/AddingPage.dart';
 // import 'package:uni_tanitim/FirebaseOperations.dart';
 import 'package:uni_tanitim/ImagesViewPage.dart';
 import 'package:uni_tanitim/VideosViewPage.dart';
@@ -44,7 +45,7 @@ class ContentPage extends StatelessWidget {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: (){
-                      print(firebaseOperations.getContents());
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddingPage(whichCategory: categoryName)));
                     },
                     child: Row(
                       children: [
