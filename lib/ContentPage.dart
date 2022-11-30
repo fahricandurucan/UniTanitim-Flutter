@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +73,7 @@ class ContentPage extends StatelessWidget {
                         children: [
                           Flexible(child: GestureDetector(
                             onTap: (){
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>VideosViewPage()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>VideosViewPage()));
                             },
                             child: Container(
                               height: 45,

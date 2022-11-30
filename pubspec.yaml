@@ -35,6 +35,7 @@ dependencies:
   firebase_storage: ^11.0.2
   image_picker: ^0.8.6
   path_provider: ^2.0.0
+  youtube_player_flutter: ^8.1.1
   path:
   get: ^4.6.5
   shared_preferences: ^2.0.15
