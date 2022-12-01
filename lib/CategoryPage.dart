@@ -243,7 +243,7 @@ class Diger extends StatelessWidget {
                         width: 70,
                         child:
                         digerList[indeks]["title"] =="Kampüs" ?
-                        Image.asset(assetImages[indeks],fit: BoxFit.cover,)
+                        Image.network(digerList[indeks]["image"],fit: BoxFit.cover,)
                             :
                         Image.asset("placeholder.png",fit: BoxFit.cover,)
 
