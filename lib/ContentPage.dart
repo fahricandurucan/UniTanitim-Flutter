@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_tanitim/AddingPage.dart';
 // import 'package:uni_tanitim/FirebaseOperations.dart';
@@ -35,7 +36,7 @@ class ContentPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Flexible(child: Text(categoryName, style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
+                Flexible(child: Text(contents[0]["title"], style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
 
                 Container(
                   margin: EdgeInsets.only(top: 7,bottom: 7,left: 15),
@@ -87,8 +88,8 @@ class ContentPage extends StatelessWidget {
                           )
                           ),
                           Flexible(child: GestureDetector(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: galeriImage,)));
+                            onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: galeriImage,)));
                             },
                             child: Container(
                               height: 45,

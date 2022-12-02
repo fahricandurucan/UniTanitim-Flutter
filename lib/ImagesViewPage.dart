@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ImageViewPage extends StatelessWidget {
 
   late List<dynamic> galeriImage;
 
   ImageViewPage({required this.galeriImage});
+
+
+
 
   @override
   Widget build(BuildContext context) {
