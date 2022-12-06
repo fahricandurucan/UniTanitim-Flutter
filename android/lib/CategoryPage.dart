@@ -1,10 +1,8 @@
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:uni_tanitim/ContentPage.dart';
-import 'package:uni_tanitim/FirebaseOperations%20.dart';
-
+import 'ContentPage.dart';
+import 'FirebaseOperations.dart';
 import 'models/Content.dart';
 import 'models/HomeCategoryContents.dart';
 
@@ -22,25 +20,6 @@ class _CategoryPageState extends State<CategoryPage> {
 
 
 
-
-
-  // List<String> resimler(){
-  //   List<String> resimler = [];
-  //   resimler.add("fakulte.jpg");
-  //   resimler.add("kutuphane.jpg");
-  //   resimler.add("tip.jpg");
-  //   resimler.add("fakulte.jpg");
-  //   resimler.add("muhendislik.png");
-  //   resimler.add("fakulte.jpg");
-  //   return resimler;
-  //
-  // }
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -54,6 +33,29 @@ class _CategoryPageState extends State<CategoryPage> {
 
         body: ListView(
           children: [
+            ElevatedButton(
+                onPressed: (){
+                  Content content1 = Content(content: "içerik", title: "başlık", image: "");
+                  Content content2 = Content(content: "içerik 2", title: "başlık 2", image: "");
+                  List<String> galeriImages = ["image link 1","image link 2"];
+                  HomeCategoryContents category = HomeCategoryContents(
+                      categoryName: "${widget.title} kategori",
+                      contents: [content1.toMap(),content2.toMap()],
+                      description: "Açıklama",
+                      coverImage: "Resim",
+                      universityId:"mskü",
+                      title: widget.title,
+                      galleryImages: galeriImages
+                  );
+                  firestore.addData(category);
+                },
+
+                onLongPress: (){
+
+                },
+                child: Text("${widget.title}'e Kategori Ekle")
+            ),
+            Text("Diğer için basılı tut"),
             Padding(
               padding: EdgeInsets.only(left: 15),
               child: Text(widget.subtitle,style: TextStyle(fontSize: 18,color: Colors.white),),
@@ -73,7 +75,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           children: [
                             //for(var i in resimler())
                             for(var i in snapshot.data)
-                              Fakuteler(i["categoryName"],i["description"],i["image"],i["contents"],i["galeriImage"]),
+                              Fakuteler(i["categoryId"],i["categoryName"],i["description"],i["coverImage"],i["contents"],i["galleryImages"]),
                           ],
                         ),
                       ),
@@ -96,26 +98,15 @@ class _CategoryPageState extends State<CategoryPage> {
                   future: firestore.getPlaceDiger(title: widget.title),
                   builder: (context, AsyncSnapshot snapshot){
                     if(snapshot.hasData){
-                      return Diger(snapshot.data); //diger kısmı eklemek için yapıldı
-                    }
-                    else{
+                      return Diger(snapshot.data);//diger kısmı eklemek için yapıldı
+                    }else{
                       return Center();
                     }
                   }
               ),
 
             ),
-            // ElevatedButton(
-            //   onPressed: (){
-            //     setState(() {
-            //       Content content1 = Content(content: "içerik 1",title: "başlık 1", image: "resim1");
-            //       HomeCategoryContents homeCategoryContent = HomeCategoryContents(categoryName: "Özel Residorm", contents: [content1.toMap()], description: "residorm açıklama...",
-            //           image: "http://yonetim.mu.edu.tr/Icerik/Sayfa/basin.mu.edu.tr/residormyeni.png", universityId: "",title: widget.title, galeriImage: []);
-            //       firestore.addData(homeCategoryContent);
-            //     });
-            //   },
-            //   child: Text("EKLE"),
-            // ),
+
           ],
         ),
       ),
@@ -126,12 +117,13 @@ class _CategoryPageState extends State<CategoryPage> {
 
 
 class Fakuteler extends StatelessWidget {
+  String categoryId;
   String title;
   String description;
   String image;
   List<dynamic> contents;
   List<dynamic> galeriImage;
-  Fakuteler(this.title,this.description,this.image,this.contents,this.galeriImage);
+  Fakuteler(this.categoryId, this.title,this.description,this.image,this.contents,this.galeriImage);
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +164,7 @@ class Fakuteler extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(top: 240),
           height: 100,
-          width: 100,
+          width: 130,
           // color: Colors.greenAccent,
           child: Stack(
             alignment: Alignment.bottomCenter,
@@ -182,12 +174,12 @@ class Fakuteler extends StatelessWidget {
                 // color: Colors.pink,
                 child: ElevatedButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: contents,coverImage: image,
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(categoryId: categoryId, contents: contents,coverImage: image,
                       categoryName: title, galeriImage: galeriImage,)));
                   },
-                  child: Text("KEŞFET"),
+                  child: Text("KEŞFET",style: TextStyle(fontFamily: 'Quicksand'),),
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0x954800B1),
+                      primary: Color(0x954800B1)
                   ),
                 ),
               ),
@@ -201,9 +193,6 @@ class Fakuteler extends StatelessWidget {
 
 class Diger extends StatelessWidget {
   List<Color> colorList= [Color(0xffffe500),Color(0xffd60061),Color(0xff008feb),Color(0xffdbdbdb),Color(0xff00bb50),Color(0xffff8a00)];
-  List<String> places= ["Yemekhane","Gençlik Merkezleri","Kütüphane","Kültür Merkezi","Kantinler","Diğer"];
-  List assetImages = ["yemekhane2.png","genclikMerkezi.png","kutuphane.png",
-    "kulturMerkezi.png","kantin.png","diger.png"]; //kampüs sayfasınde diger kısım eklenirken kullanıldı
 
 
   late List digerList;
@@ -224,8 +213,8 @@ class Diger extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(contents: digerList[indeks]["contents"],
-                      coverImage: digerList[indeks]["image"], categoryName: digerList[indeks]["title"], galeriImage: digerList[indeks]["galeriImage"],)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(categoryId:digerList[indeks]["categoryId"], contents: digerList[indeks]["contents"],
+                    coverImage: digerList[indeks]["image"], categoryName: digerList[indeks]["title"], galeriImage: digerList[indeks]["galeriImage"],)));
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -258,3 +247,4 @@ class Diger extends StatelessWidget {
     );
   }
 }
+

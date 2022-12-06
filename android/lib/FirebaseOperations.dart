@@ -1,36 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uni_tanitim/models/InitCategory.dart';
-
+import 'models/Content.dart';
 import 'models/HomeCategoryContents.dart';
+import 'models/InitCategory.dart';
 
 class FirebaseOperations{
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getInitCategories()async{
-    var userDocument = await firestore.collection("initCategories").get();
-    print(userDocument.docs[0]["categoryDesc"]);
-    return userDocument.docs;
-  }
 
-  Future<void> insertCategory(String categoryDesc, String categoryImage, String categoryName, String universityId,String subtitle) async{
-    InitCategory category = InitCategory(categoryName: categoryName, categoryDesc: categoryDesc, categoryImage: categoryImage, universityId: universityId, subtitle: subtitle);
-    await firestore.collection("initCategories").add(category.toMap());
-  }
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getHomeCategories()async{
     var userDocument = await firestore.collection("homeCategories").get();
-    print("--------------------------------- ${userDocument.docs[0]["title"]}");
 
     return userDocument.docs;
   }
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getContents()async{
-    var contentMap = await firestore.collection("homeCategoryContent").get();
-
-    return contentMap.docs;
+  Future<void> insertCategory({required String title, required String description, required String image}) async{
+    InitCategory category = InitCategory(title: title, description: description, image: image);
+    await firestore.collection("homeCategories").add(category.toMap());
   }
 
 
-  ////////////////////////////benim kod/////////////////7
+
 
   Future<List> getPlaceUni({required String title}) async{
     var placeDocuments =await firestore.collection("homeCategoryContent").get();
@@ -42,8 +32,16 @@ class FirebaseOperations{
     }
     return result;
   }
+
   Future<void> addData(HomeCategoryContents homeCategoryContents) async{
-    await firestore.collection("homeCategoryContent").add(homeCategoryContents.toMap());
+    String yeniDataId = firestore.collection("homeCategoryContent").doc().id;
+    var map = homeCategoryContents.toMap();
+    map["categoryId"] =yeniDataId;  // adding categoryId
+    await firestore.doc("homeCategoryContent/${yeniDataId}").set(map);
+  }
+
+  Future<void> updateGallery(String categoryId, String imageLink)async{
+    await firestore.doc("homeCategoryContent/${categoryId}").update({"galleryImages.1" :imageLink});
   }
 
   Future<List> getPlaceDiger({required String title}) async{
@@ -60,8 +58,6 @@ class FirebaseOperations{
   Future<void> addDiger(HomeCategoryContents homeCategoryContents) async{
     await firestore.collection("homeCategoryDiger").add(homeCategoryContents.toMapDiger());
   }
-
-
 
 
 }

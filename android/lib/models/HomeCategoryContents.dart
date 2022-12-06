@@ -1,37 +1,37 @@
 
-import 'Content.dart';
 
 class HomeCategoryContents{
   String categoryName;
   List<Map<dynamic,dynamic>> contents;
   String description;
-  String image;
+  String coverImage;
   String universityId;
   String title;
-  List<dynamic> galeriImage;
+  List<dynamic> galleryImages;
 
   HomeCategoryContents({required this.categoryName, required this.contents,
-    required this.description,required this.image,required this.universityId,
-    required this.title,required this.galeriImage});
+    required this.description,required this.coverImage,required this.universityId,
+    required this.title,required this.galleryImages});
 
   Map<String, dynamic> toMap() {
     return {
       'categoryName': this.categoryName,
       'contents': this.contents,
       'description': this.description,
-      'image': this.image,
+      'coverImage': this.coverImage,
       'universityId': this.universityId,
       'title': this.title,
-      'galeriImage': this.galeriImage,
+      'galleryImages': this.galleryImages,
     };
   }
+
   Map<String, dynamic> toMapDiger() {
     return {
       'categoryName': this.categoryName,
       'contents': this.contents,
-      'image': this.image,
+      'coverImage': this.coverImage,
       'title': this.title,
-      'galeriImage': this.galeriImage,
+      'galleryImages': this.galleryImages,
 
     };
   }
@@ -41,10 +41,10 @@ class HomeCategoryContents{
       categoryName: map['categoryName'],
       contents: map['contents'],
       description: map['description'],
-      image: map['image'],
+      coverImage: map['image'],
       universityId: map['universityId'],
       title: map['title'],
-      galeriImage: map['galeriImage'],
+      galleryImages: map['galeriImage'],
 
     );
   }

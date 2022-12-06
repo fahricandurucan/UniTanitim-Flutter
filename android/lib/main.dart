@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:uni_tanitim/CategoryPage.dart';
-import 'package:uni_tanitim/Homepage.dart';
+import 'package:get/get.dart';
 
+import 'ContentPage.dart';
+import 'Homepage.dart';
 import 'firebase_options.dart';
 
 void main()async{
@@ -16,12 +16,11 @@ void main()async{
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Homepage(),
+    return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Homepage()
     );
   }
 }

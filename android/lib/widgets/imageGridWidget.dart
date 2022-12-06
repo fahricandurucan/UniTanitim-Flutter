@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uni_tanitim/SharedPreferencesOperations.dart';
 
 import '../GetxControllerClass.dart';
+import '../SharedPreferencesOperations.dart';
 
 class ImageGridView extends StatelessWidget {
   GetxControllerClass getxController = Get.put(GetxControllerClass());
@@ -66,7 +66,7 @@ class ImageGridView extends StatelessWidget {
 
                       ],
                     ),
-                  ),
+                    ),
                 ),
               );
             }
