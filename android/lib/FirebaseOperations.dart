@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'models/Comments.dart';
 import 'models/Content.dart';
 import 'models/HomeCategoryContents.dart';
 import 'models/InitCategory.dart';
@@ -31,6 +32,22 @@ class FirebaseOperations{
       }
     }
     return result;
+  }
+
+  Future<void> addComments({required Comment comment}) async{
+    print(comment.toString());
+    await firestore.collection("userComments").add(comment.toMap());
+  }
+  Future<List> getComments({required String placeId})async{
+    var commentsDocument = await firestore.collection("userComments").get();
+    List commentsList = [];
+    for(var i in commentsDocument.docs){
+      if(i.data()["placeId"]==placeId){
+        commentsList.add(i);
+        print("placeId --------------- > ${i["placeId"]}");
+      }
+    }
+    return commentsList;
   }
 
   Future<void> addData(HomeCategoryContents homeCategoryContents) async{

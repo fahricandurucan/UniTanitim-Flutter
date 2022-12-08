@@ -2,12 +2,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AddingPage.dart';
+import 'CommentsPage.dart';
 import 'FirebaseOperations.dart';
 import 'ImagesViewPage.dart';
 import 'VideosViewPage.dart';
+import 'models/Comments.dart';
 import 'widgets/contentWidget.dart';
 import 'widgets/linkWidget.dart';
 
@@ -23,6 +26,7 @@ class ContentPage extends StatelessWidget {
 
   FirebaseOperations firebaseOperations = FirebaseOperations();
 
+  var currentTime = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
 
   @override
@@ -91,7 +95,7 @@ class ContentPage extends StatelessWidget {
                     Flexible(child: GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: galeriImage,)));
-                      },
+                        },
                       child: Container(
                         height: 45,
                         color: Color(0x88cbb000),
@@ -112,6 +116,15 @@ class ContentPage extends StatelessWidget {
             for(var content in contents)
               showContent(content)
           ]
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsPage(placeId: categoryId,)));
+
+          // Comment comment =Comment(comment: "Barınam Yorum", title: "barınma", date: currentTime, likes: 0, placeId: categoryId);
+          // firebaseOperations.addComments(comment: comment);
+          },
+        child: Icon(Icons.comment),
       ),
     );
   }
