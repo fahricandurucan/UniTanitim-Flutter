@@ -34,10 +34,28 @@ class FirebaseOperations{
     return result;
   }
 
+  Future<void> updateLikes(String commentId,bool isLiked,int likes)async{
+    print("if den önce ${commentId}  ${isLiked}  ${likes}");
+    if(!isLiked){
+      likes = likes + 1;
+    }
+
+
+    print("if den sonra ${commentId}  ${isLiked}  ${likes}");
+
+    await firestore.doc("userComments/${commentId}").update({"likes":likes});
+  }
+
   Future<void> addComments({required Comment comment}) async{
-    print(comment.toString());
     await firestore.collection("userComments").add(comment.toMap());
   }
+  Future<void> addComments2(Comment comment) async{
+    String commentId = firestore.collection("userComments").doc().id;
+    var map =comment.toMap();
+    map["commentId"] = commentId;
+    await firestore.doc("userComments/${commentId}").set(map);
+  }
+
   Future<List> getComments({required String placeId})async{
     var commentsDocument = await firestore.collection("userComments").get();
     List commentsList = [];

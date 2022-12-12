@@ -121,8 +121,9 @@ class ContentPage extends StatelessWidget {
         onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsPage(placeId: categoryId,)));
 
-          // Comment comment =Comment(comment: "Mühendis Yorum", title: "Mühhhh", date: currentTime, likes: 0, placeId: categoryId);
+          // Comment comment =Comment(comment: "Mühendis Yorum2", title: "Mühhhh", date: currentTime, likes: 0, placeId: categoryId);
           // firebaseOperations.addComments(comment: comment);
+          // firebaseOperations.addComments2(comment);
           },
         child: Icon(Icons.comment),
       ),

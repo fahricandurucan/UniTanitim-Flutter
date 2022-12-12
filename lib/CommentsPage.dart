@@ -1,18 +1,27 @@
+import 'dart:async';
+
 import 'package:comment_box/comment/comment.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_tanitim/SharedPreferencesOperations.dart';
+
 import 'package:uni_tanitim/models/Comments.dart';
 
 import 'FirebaseOperations.dart';
 
 class CommentsPage extends StatefulWidget {
 
+
   late String placeId;
   CommentsPage({required this.placeId});
 
+
   var currentTime = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+
 
 
   @override
@@ -25,6 +34,7 @@ class _CommentsPageState extends State<CommentsPage> {
 
 
   FirebaseOperations firestore = FirebaseOperations();
+
 
 
   @override
@@ -45,7 +55,7 @@ class _CommentsPageState extends State<CommentsPage> {
                 return ListView(
                   children: [
                     for(var i in snapshot.data)
-                      CommentWidget(comment: i["comment"], title: i["title"], date: i["date"],),
+                      CommentWidget(comment: i["comment"], title: i["title"], date: i["date"],likes: i["likes"],commentId:i["commentId"]),
                   ],
                 );
               }
@@ -59,9 +69,8 @@ class _CommentsPageState extends State<CommentsPage> {
           withBorder: false,
           sendButtonMethod: () {
             if (formKey.currentState!.validate()) {
-              print(commentController.text);
               setState(() {
-                Comment comment = Comment(comment: commentController.text, title: "deneme", date: widget.currentTime, likes: 0, placeId: widget.placeId);
+                Comment comment = Comment(comment: commentController.text, title: "kampüs", date: widget.currentTime, likes: 0, placeId: widget.placeId);
                 firestore.addComments(comment: comment);
               });
               commentController.clear();
@@ -87,8 +96,12 @@ class CommentWidget extends StatefulWidget {
   late String title;
   late String date;
   late int likes;
+  late String commentId;
 
-  CommentWidget({required this.comment,required this.title, required this.date});
+
+  CommentWidget({required this.comment,required this.title, required this.date,required this.likes,required this.commentId});
+
+
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -96,8 +109,9 @@ class CommentWidget extends StatefulWidget {
 
 class _CommentWidgetState extends State<CommentWidget> {
 
-  int likess= 0;
+
   bool isLiked = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +120,6 @@ class _CommentWidgetState extends State<CommentWidget> {
       child: SizedBox(
         height: 100,
         child: Card(
-
           elevation: 3,
           shadowColor: Colors.grey,
           child: ListTile(
@@ -122,8 +135,18 @@ class _CommentWidgetState extends State<CommentWidget> {
                       Container(
                         alignment: Alignment.bottomCenter,
                         child:LikeButton(
+                          onTap: onLikeButtonTapped,
                           isLiked: isLiked,
-                          likeCount: likess,
+                          likeCount: widget.likes,
+                          likeBuilder: (isTapped) {
+                            return Icon(
+                              Icons.favorite,
+                              color:  isTapped ? Colors.pink : Colors.grey,
+
+                            );
+                          },
+
+
                         ),
                       ),
                     ],
@@ -136,4 +159,24 @@ class _CommentWidgetState extends State<CommentWidget> {
       ),
     );
   }
+
+
+
+
+
+  Future<bool> onLikeButtonTapped(bool isLiked)async {
+    FirebaseOperations firebaseOperations = FirebaseOperations();
+
+    await setCommentId(widget.commentId);
+
+    firebaseOperations.updateLikes(widget.commentId, isLiked, widget.likes);
+
+    return !isLiked;
+  }
+
+
+
+
+
+
 }
