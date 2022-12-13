@@ -1,5 +1,6 @@
 import 'dart:async';
 
+
 import 'package:comment_box/comment/comment.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class _CommentsPageState extends State<CommentsPage> {
             if (formKey.currentState!.validate()) {
               setState(() {
                 Comment comment = Comment(comment: commentController.text, title: "kampüs", date: widget.currentTime, likes: 0, placeId: widget.placeId);
-                firestore.addComments(comment: comment);
+                firestore.addComments2(comment);
               });
               commentController.clear();
               FocusScope.of(context).unfocus();
@@ -109,8 +110,19 @@ class CommentWidget extends StatefulWidget {
 
 class _CommentWidgetState extends State<CommentWidget> {
 
+  FirebaseOperations firebaseOperations = FirebaseOperations();
 
   bool isLiked = false;
+  
+  late List listem=[];
+
+  late int temp ;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
 
 
   @override
@@ -134,20 +146,34 @@ class _CommentWidgetState extends State<CommentWidget> {
                     children: [
                       Container(
                         alignment: Alignment.bottomCenter,
-                        child:LikeButton(
-                          onTap: onLikeButtonTapped,
-                          isLiked: isLiked,
-                          likeCount: widget.likes,
-                          likeBuilder: (isTapped) {
-                            return Icon(
-                              Icons.favorite,
-                              color:  isTapped ? Colors.pink : Colors.grey,
-
-                            );
-                          },
-
-
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  firebaseOperations.updateLikes(widget.commentId, isLiked, widget.likes);
+                                });
+                              },
+                              icon: Icon(
+                                  Icons.favorite
+                              ),
+                              color: isLiked ? Colors.pink : Colors.grey,
+                            ),
+                            Text(widget.likes.toString(),style: TextStyle(fontSize: 18),),
+                          ],
                         ),
+                        // child:LikeButton(
+                        //   onTap: onLikeButtonTapped,
+                        //   isLiked: isLiked ? true :false,
+                        //   likeCount: widget.likes,
+                        //   likeBuilder: (isTapped) {
+                        //     return Icon(
+                        //       Icons.favorite,
+                        //       color:  isTapped ? Colors.pink : Colors.grey,
+                        //
+                        //     );
+                        //   },
+                        // ),
                       ),
                     ],
                   ),
@@ -160,14 +186,25 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-
-
-
+  
+  
+  void state(bool isLiked){
+    
+  }
 
   Future<bool> onLikeButtonTapped(bool isLiked)async {
     FirebaseOperations firebaseOperations = FirebaseOperations();
 
+    if(isLiked==false){
+      listem.add(widget.commentId);
+    }
+    else{
+      listem.remove(widget.commentId);
+      
+    }
+    
     await setCommentId(widget.commentId);
+    await getCommentId(widget.commentId);
 
     firebaseOperations.updateLikes(widget.commentId, isLiked, widget.likes);
 
