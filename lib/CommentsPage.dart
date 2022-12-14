@@ -6,10 +6,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_tanitim/SharedPreferencesOperations.dart';
 
 import 'package:uni_tanitim/models/Comments.dart';
+import 'package:uni_tanitim/models/LikeCountProvider.dart';
 
 import 'FirebaseOperations.dart';
 
@@ -36,7 +38,11 @@ class _CommentsPageState extends State<CommentsPage> {
 
   FirebaseOperations firestore = FirebaseOperations();
 
-
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firestore.getComments(placeId: widget.placeId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,17 +118,14 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   FirebaseOperations firebaseOperations = FirebaseOperations();
 
-  bool isLiked = false;
-  
+
   late List listem=[];
 
-  late int temp ;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  bool state = false;
 
-  }
+  late int temp  = widget.likes;
+  @override
+
 
 
   @override
@@ -148,18 +151,36 @@ class _CommentWidgetState extends State<CommentWidget> {
                         alignment: Alignment.bottomCenter,
                         child: Row(
                           children: [
-                            IconButton(
-                              onPressed: (){
-                                setState(() {
-                                  firebaseOperations.updateLikes(widget.commentId, isLiked, widget.likes);
-                                });
-                              },
-                              icon: Icon(
-                                  Icons.favorite
-                              ),
-                              color: isLiked ? Colors.pink : Colors.grey,
+                            Consumer<LikeCountProvider>(
+                                builder: (context,likeCountNesne,child){
+                                  return IconButton(
+                                    onPressed: (){
+                                      setState(() {
+                                        if(likeCountNesne.boolState()){
+                                          likeCountNesne.likeAzalt(temp);
+                                          likeCountNesne.boolFalse();
+
+                                        }
+                                        else{
+                                          likeCountNesne.likeArttir(temp);
+                                          setCommentId(widget.commentId);
+                                          likeCountNesne.boolTrue();
+                                        }
+                                        firebaseOperations.updateLikes(widget.commentId, state, widget.likes);
+                                      });
+                                    },
+                                    icon: Icon(
+                                        Icons.favorite
+                                    ),
+                                    color: likeCountNesne.boolState() ? Colors.pink : Colors.grey,
+                                  );
+                                }
                             ),
-                            Text(widget.likes.toString(),style: TextStyle(fontSize: 18),),
+                            Consumer<LikeCountProvider>(
+                                builder: (context,likeCountNesne,child){
+                                  return Text("${likeCountNesne.likeOku(temp)}",style: TextStyle(fontSize: 18),);
+                                }
+                            ),
                           ],
                         ),
                         // child:LikeButton(
@@ -188,9 +209,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   
   
-  void state(bool isLiked){
-    
-  }
+
 
   Future<bool> onLikeButtonTapped(bool isLiked)async {
     FirebaseOperations firebaseOperations = FirebaseOperations();
