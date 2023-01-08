@@ -14,6 +14,7 @@ class YoutubePlayerWidget extends StatelessWidget {
       flags: YoutubePlayerFlags(
         autoPlay: false,
       ),
+
     );
 
     return YoutubePlayerBuilder(

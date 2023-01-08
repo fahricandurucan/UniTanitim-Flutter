@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:uni_tanitim/FirebaseOperations.dart';
+import 'package:uni_tanitim/models/Category.dart';
+import 'package:uni_tanitim/widgets/youtubePlayerWidget.dart';
 
-import 'FirebaseOperations.dart';
-import 'widgets/youtubePlayerWidget.dart';
+import 'GetxControllerClass.dart';
 
 class VideosViewPage extends StatelessWidget {
 
-  FirebaseOperations firebaseOperations = FirebaseOperations();
+  List videos;
+  VideosViewPage({required this.videos});
 
+  FirebaseOperations firebaseOperations = FirebaseOperations();
+  GetxControllerClass getxController = Get.put(GetxControllerClass());
   @override
   Widget build(BuildContext context) {
+
 
     return SafeArea(
       child: Scaffold(
@@ -16,32 +23,23 @@ class VideosViewPage extends StatelessWidget {
         body: Stack(
           children: [
             Expanded(
-              child: FutureBuilder(
-                future: firebaseOperations.getPlaceUni(title: "Kampüs"),
-                  builder: ((context, AsyncSnapshot snapshot) {
-                    if(snapshot.hasData){
-                      return ListView(
-                        children: [
-                          SizedBox(height: 50,),
-                          for(String link in snapshot.data[0]["videos"])
-                            Container(
-                              margin: EdgeInsets.all(8),
-                              decoration: BoxDecoration(border: Border.all(width: 2,color: Colors.yellow), borderRadius: BorderRadius.circular(18)),
-                              height: 180,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: YoutubePlayerWidget(videoLink: link)
-                              ),
-                            ),
+              child: ListView(
+                children: [
+                  SizedBox(height: 50,),
+                  for(String videoLink in videos)
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: BoxDecoration(border: Border.all(width: 2,color: Colors.yellow), borderRadius: BorderRadius.circular(18)),
+                      height: 180,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: YoutubePlayerWidget(videoLink: videoLink)
+                      ),
+                    ),
 
-                          SizedBox(height: 100,)
-                        ],
-                      );
-                    }else{
-                      return CircularProgressIndicator();
-                    }
-                  })
-              )
+                  SizedBox(height: 100,)
+                ],
+              ),
 
             ),
 
@@ -53,9 +51,7 @@ class VideosViewPage extends StatelessWidget {
               child: IconButton(
                 icon: Icon(Icons.arrow_back_rounded, color: Colors.white,),
                 onPressed: ()async{
-
-                  var contents = await firebaseOperations.getPlaceUni(title: "Kampüs");
-                  print(contents[0]["videos"]);
+                  Get.back();
                 },
               ),
             ),

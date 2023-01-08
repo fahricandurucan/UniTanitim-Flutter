@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uni_tanitim/SPOperations.dart';
 
 import '../GetxControllerClass.dart';
-import '../SharedPreferencesOperations.dart';
 
 class ImageGridView extends StatelessWidget {
   GetxControllerClass getxController = Get.put(GetxControllerClass());
@@ -56,7 +56,7 @@ class ImageGridView extends StatelessWidget {
                               int isDeleted= await deleteFile(File(allImageList[index]));
                               if(isDeleted ==1){
                                 List<String> updatedList = [...allImageList.where((element ) => element!=allImageList[index]).toList()];
-                                setUserImages(updatedList);
+                                SPOperations.setUserImages(updatedList);
                                 getxController.userImages.value=updatedList;
                               }
 

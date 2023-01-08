@@ -6,6 +6,7 @@ class ImageViewPage extends StatelessWidget {
 
   ImageViewPage({required this.galeriImage});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

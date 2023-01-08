@@ -15,8 +15,18 @@ class ContentWidget extends StatelessWidget {
       margin: EdgeInsets.only(left: 12,right: 12,bottom: 12),
       child: Column(
         children: [
-            title!=""? Text(title!, style: TextStyle(fontSize: titleFontSize,  decoration: TextDecoration.none, color: Colors.black)):SizedBox(),
-            Text(content, style: TextStyle(fontSize: 16,color: Colors.black87,  decoration: TextDecoration.none)),
+            title!=""? Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(title!, style: TextStyle(fontSize: titleFontSize,  decoration: TextDecoration.none, color: Colors.black)),
+                  ),
+                ),
+              ],
+            ):SizedBox(),
+            content!=""?Text(content, style: TextStyle(fontSize: 16,color: Colors.black87,  decoration: TextDecoration.none)): SizedBox(),
             if(imageLink!="")
             Image.network(imageLink!)
         ],

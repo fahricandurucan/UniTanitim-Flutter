@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uni_tanitim/CategoryPage.dart';
+import 'package:uni_tanitim/FirebaseOperations.dart';
 
-import 'CategoryPage.dart';
-import 'FirebaseOperations.dart';
+import 'GetxControllerClass.dart';
 
 class Homepage extends StatelessWidget {
   FirebaseOperations firebaseOperations = FirebaseOperations();
-
-
-
-
+  GetxControllerClass getxController = Get.put(GetxControllerClass());
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,6 +27,7 @@ class Homepage extends StatelessWidget {
             future: firebaseOperations.getHomeCategories(),
             builder: ((context, AsyncSnapshot snapshot) {
               if(snapshot.data !=null){
+
                 return ListView(
                   children: [
                     // ElevatedButton(
@@ -38,7 +37,8 @@ class Homepage extends StatelessWidget {
                     // child: Text("Add Category")),
                     for(int i=0; i<snapshot.data.length; i++)
                       GestureDetector(
-                        onTap: (){
+                        onTap: () async{
+                          await getxController.getPlacesGetX(title: snapshot.data[i]["title"]);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage(title: snapshot.data[i]["title"], subtitle: snapshot.data[i]["subtitle"],)));
                         },
                         child: Container(

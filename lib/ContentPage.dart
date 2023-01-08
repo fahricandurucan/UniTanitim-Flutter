@@ -2,31 +2,29 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
-import 'package:intl/intl.dart';
+import 'package:uni_tanitim/AddingPage.dart';
+import 'package:uni_tanitim/CommentsPage.dart';
+import 'package:uni_tanitim/FirebaseOperations.dart';
+import 'package:uni_tanitim/ImagesViewPage.dart';
+import 'package:uni_tanitim/VideosViewPage.dart';
+import 'package:uni_tanitim/widgets/contentWidget.dart';
+import 'package:uni_tanitim/widgets/linkWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'AddingPage.dart';
-import 'CommentsPage.dart';
-import 'FirebaseOperations.dart';
-import 'ImagesViewPage.dart';
-import 'VideosViewPage.dart';
-import 'models/Comments.dart';
-import 'widgets/contentWidget.dart';
-import 'widgets/linkWidget.dart';
+import 'GetxControllerClass.dart';
+import 'models/Category.dart';
+
+final liste = [];
+
 
 class ContentPage extends StatelessWidget {
-  String categoryId;
-  late List<dynamic> contents;
-  late String coverImage;
-  late String categoryName;
-  late List<dynamic> galeriImage;
+  Category category;
 
-  ContentPage({required this.categoryId,required this.contents,required this.coverImage,required this.categoryName,required this.galeriImage}) ;
+  ContentPage({required this.category}) ;
 
 
   FirebaseOperations firebaseOperations = FirebaseOperations();
-
-  var currentTime = DateFormat('dd-MM-yyyy').format(DateTime.now());
+  GetxControllerClass getxController = Get.put(GetxControllerClass());
 
 
   @override
@@ -41,7 +39,7 @@ class ContentPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                Flexible(child: Text(categoryName, style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
+                Flexible(child: Text(category.categoryName, style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
 
                 Container(
                   margin: EdgeInsets.only(top: 7,bottom: 7,left: 15),
@@ -50,7 +48,7 @@ class ContentPage extends StatelessWidget {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: (){
-                      Get.to(AddingPage(categoryId: categoryId, whichCategory: categoryName));
+                      Get.to(AddingPage(categoryId: category.categoryId, whichCategory: category.categoryName));
                     },
                     child: Row(
                       children: [
@@ -74,12 +72,13 @@ class ContentPage extends StatelessWidget {
                 Container(
                     height:250,
                     width: width,
-                    child:Image.network(coverImage,fit: BoxFit.cover,)),
+                    child:Image.network(category.coverImage,fit: BoxFit.cover,)),
                 Row(
                   children: [
                     Flexible(child: GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>VideosViewPage()));
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>VideosViewPage(videos :category.videos)));
                       },
                       child: Container(
                         height: 45,
@@ -94,8 +93,8 @@ class ContentPage extends StatelessWidget {
                     ),
                     Flexible(child: GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: galeriImage,)));
-                        },
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: category.galleryImages,)));
+                      },
                       child: Container(
                         height: 45,
                         color: Color(0x88cbb000),
@@ -113,22 +112,25 @@ class ContentPage extends StatelessWidget {
             ),
 
 
-            for(var content in contents)
+            for(var content in category.contents)
               showContent(content)
           ]
       ),
+
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsPage(placeId: categoryId,)));
+        onPressed: ()async{
+          await getxController.getCommentsGetX(placeId: category.categoryId);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsPage(placeId: category.categoryId,)));
 
           // Comment comment =Comment(comment: "Mühendis Yorum2", title: "Mühhhh", date: currentTime, likes: 0, placeId: categoryId);
           // firebaseOperations.addComments(comment: comment);
           // firebaseOperations.addComments2(comment);
-          },
+        },
         child: Icon(Icons.comment),
       ),
     );
   }
+
 
 
   Widget showContent(Map content){

@@ -2,20 +2,19 @@ import 'dart:async';
 
 
 import 'package:comment_box/comment/comment.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:like_button/like_button.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uni_tanitim/SharedPreferencesOperations.dart';
-
-import 'package:uni_tanitim/models/Comments.dart';
-import 'package:uni_tanitim/models/LikeCountProvider.dart';
+import 'package:uni_tanitim/widgets/commentWidget2.dart';
 
 import 'FirebaseOperations.dart';
+import 'GetxControllerClass.dart';
+import 'SPOperations.dart';
+import 'models/Comment.dart';
 
 class CommentsPage extends StatefulWidget {
+
+
 
 
   late String placeId;
@@ -26,7 +25,6 @@ class CommentsPage extends StatefulWidget {
 
 
 
-
   @override
   _CommentsPageState createState() => _CommentsPageState();
 }
@@ -34,205 +32,153 @@ class CommentsPage extends StatefulWidget {
 class _CommentsPageState extends State<CommentsPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
+  late FocusNode commentFocus;
+  final commentEditTextController = TextEditingController();
+  late FocusNode titleFocus;
+  final titleEditTextController = TextEditingController();
+
+
+  final titleEditTextController2 = TextEditingController();
+  var TextFormFieldKey = GlobalKey();
+
+
+
+  GetxControllerClass getxController = Get.put(GetxControllerClass());
+
+  @override
+  void dispose() {
+    commentFocus.dispose();
+    titleFocus.dispose();
+    super.dispose();
+  }
 
 
   FirebaseOperations firestore = FirebaseOperations();
 
   void initState() {
-    // TODO: implement initState
+    commentFocus = FocusNode();
+    titleFocus = FocusNode();
+    //firestore.getComments2(placeId: widget.placeId);
     super.initState();
-    firestore.getComments(placeId: widget.placeId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurpleAccent,
-        centerTitle: true,
-        title: Text("Yorumlar"),
-      ),
-      body: Container(
-        child: CommentBox(
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
-          child: FutureBuilder(
-            future: firestore.getComments(placeId: widget.placeId),
-            builder: (context,AsyncSnapshot snapshot){
-              if(snapshot.hasData){
-                return ListView(
-                  children: [
-                    for(var i in snapshot.data)
-                      CommentWidget(comment: i["comment"], title: i["title"], date: i["date"],likes: i["likes"],commentId:i["commentId"]),
-                  ],
-                );
-              }
-              else{
-                return Center(child: Text("ERROR"),);
-              }
-            },
-          ),
-          labelText: 'Yorum yaz...',
-          errorText: 'Comment cannot be blank',
-          withBorder: false,
-          sendButtonMethod: () {
-            if (formKey.currentState!.validate()) {
-              setState(() {
-                Comment comment = Comment(comment: commentController.text, title: "kampüs", date: widget.currentTime, likes: 0, placeId: widget.placeId);
-                firestore.addComments2(comment);
-              });
-              commentController.clear();
-              FocusScope.of(context).unfocus();
-            } else {
-              print("Not validated");
-            }
-          },
-          formKey: formKey,
-          commentController: commentController,
-          backgroundColor: Colors.deepPurpleAccent,
-          textColor: Colors.white,
-          sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
+    return WillPopScope(
+      onWillPop: ()async{
+        print(" ıu gıug ıytfıyfıyftfd");
+        return true;
+      },
+
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.black87,
+          centerTitle: true,
+          title: Text("Yorumlar"),
         ),
-      ),
-    );
-  }
-}
+        body: GestureDetector(
+          onTap: (){
+            FocusScope.of(context).unfocus();
+            getxController.titleVisibility.value = false;
+            print("kland");
+          },
 
-class CommentWidget extends StatefulWidget {
+          child: Obx(()=>ListView(
+            children: [
+              for(var c in getxController.comments)
+                CommentWidget2(comment:c),
+              SizedBox(height: 70,),
+            ],
+          ),)
+        ),
 
-  late String comment;
-  late String title;
-  late String date;
-  late int likes;
-  late String commentId;
-
-
-  CommentWidget({required this.comment,required this.title, required this.date,required this.likes,required this.commentId});
-
-
-
-  @override
-  _CommentWidgetState createState() => _CommentWidgetState();
-}
-
-class _CommentWidgetState extends State<CommentWidget> {
-
-  FirebaseOperations firebaseOperations = FirebaseOperations();
-
-
-  late List listem=[];
-
-  bool state = false;
-
-  late int temp  = widget.likes;
-  @override
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 100,
-        child: Card(
-          elevation: 3,
-          shadowColor: Colors.grey,
-          child: ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.deepPurpleAccent,),
-            title: Text(widget.title),
-            subtitle: Text(widget.comment),
-            trailing: FittedBox(
-              child: Column(
-                children: [
-                  Text(widget.date),
-                  Wrap(
-                    children: [
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          children: [
-                            Consumer<LikeCountProvider>(
-                                builder: (context,likeCountNesne,child){
-                                  return IconButton(
-                                    onPressed: (){
-                                      setState(() {
-                                        if(likeCountNesne.boolState()){
-                                          likeCountNesne.likeAzalt(temp);
-                                          likeCountNesne.boolFalse();
-
-                                        }
-                                        else{
-                                          likeCountNesne.likeArttir(temp);
-                                          setCommentId(widget.commentId);
-                                          likeCountNesne.boolTrue();
-                                        }
-                                        firebaseOperations.updateLikes(widget.commentId, state, widget.likes);
-                                      });
-                                    },
-                                    icon: Icon(
-                                        Icons.favorite
-                                    ),
-                                    color: likeCountNesne.boolState() ? Colors.pink : Colors.grey,
-                                  );
-                                }
-                            ),
-                            Consumer<LikeCountProvider>(
-                                builder: (context,likeCountNesne,child){
-                                  return Text("${likeCountNesne.likeOku(temp)}",style: TextStyle(fontSize: 18),);
-                                }
-                            ),
-                          ],
+        floatingActionButton: Padding(
+          padding: isKeyboardOpen
+              ? EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
+              : const EdgeInsets.all(1.0),
+          child: AnimatedContainer(
+            duration: Duration(seconds: 2),
+            padding: EdgeInsets.all(8),
+            color: Colors.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Obx(()=>Visibility(
+                  visible: getxController.titleVisibility.value,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SizedBox(
+                      height: 30,
+                      child: TextField(
+                        focusNode: titleFocus,
+                        controller: titleEditTextController,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(8),
+                          hintText: "Başlık ya da Adın",
+                          border: OutlineInputBorder(borderSide: BorderSide.none),
                         ),
-                        // child:LikeButton(
-                        //   onTap: onLikeButtonTapped,
-                        //   isLiked: isLiked ? true :false,
-                        //   likeCount: widget.likes,
-                        //   likeBuilder: (isTapped) {
-                        //     return Icon(
-                        //       Icons.favorite,
-                        //       color:  isTapped ? Colors.pink : Colors.grey,
-                        //
-                        //     );
-                        //   },
-                        // ),
                       ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        onTap: (){
+                          getxController.titleVisibility.value=true;
+                        },
+                        focusNode: commentFocus,
+                        controller: commentController,
+                        decoration: InputDecoration(
+                          suffixIcon: GestureDetector(
+                              onTap: (){
+                                if(commentController.text!=""){
+                                  Comment comment = Comment(comment: commentController.text, title: "kampüs",
+                                      date: widget.currentTime, likes: 0, placeId: widget.placeId, commentId: "null", isLiked: false);
+                                  firestore.addComments2(comment);
+                                  Get.snackbar(
+                                      "Yorum Gönderildi",
+                                      "",
+                                    messageText: Text("Kısa süre içerisinde yayınlanacaktır.",style: TextStyle(fontFamily: "Quicksand", color: Colors.white, fontSize: 15)),
+                                    colorText: Colors.white,
+                                    backgroundColor: Color(0xae000000),);
+
+                                  commentController.clear();
+                                  titleEditTextController.clear();
+                                  FocusScope.of(context).unfocus();
+                                  getxController.titleVisibility.value = false;
+                                }
+
+                              },
+                              child: Icon(Icons.send_rounded)),
+                          contentPadding: EdgeInsets.all(8),
+                          hintText: "Yorum Yaz",
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
+        ,
       ),
     );
   }
-
-  
-  
-
-
-  Future<bool> onLikeButtonTapped(bool isLiked)async {
-    FirebaseOperations firebaseOperations = FirebaseOperations();
-
-    if(isLiked==false){
-      listem.add(widget.commentId);
-    }
-    else{
-      listem.remove(widget.commentId);
-      
-    }
-    
-    await setCommentId(widget.commentId);
-    await getCommentId(widget.commentId);
-
-    firebaseOperations.updateLikes(widget.commentId, isLiked, widget.likes);
-
-    return !isLiked;
-  }
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+

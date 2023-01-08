@@ -5,11 +5,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'FirebaseOperations.dart';
-import 'GetxControllerClass.dart';
-import 'SharedPreferencesOperations.dart';
-import 'widgets/imageGridWidget.dart';
+import 'package:uni_tanitim/FirebaseOperations.dart';
+import 'package:uni_tanitim/GetxControllerClass.dart';
+import 'package:uni_tanitim/SPOperations.dart';
+import 'package:uni_tanitim/widgets/imageGridWidget.dart';
 
 class AddingPage extends StatelessWidget {
   String whichCategory;
@@ -18,8 +17,8 @@ class AddingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//
-
+    final titleTextEditController = TextEditingController();
+    final descTextEditController = TextEditingController();
     GetxControllerClass getxController = Get.put(GetxControllerClass());
     final firebaseStorage = FirebaseStorage.instance;
     FirebaseOperations firebaseOperations = FirebaseOperations();
@@ -32,8 +31,6 @@ class AddingPage extends StatelessWidget {
                 Container(height: 60,
                   child: Row(
                     children: [
-			//khdsblfgdlg
-
                       IconButton(
                           onPressed: (){
                             Get.back();
@@ -70,9 +67,9 @@ class AddingPage extends StatelessWidget {
                                     final fileName = basename(file.path);
                                     await file.saveTo('$duplicateFilePath/$fileName');
 
-                                    List<String> allImages = await getUserImages();
+                                    List<String> allImages = await SPOperations.getUserImages();
                                     allImages.add('$duplicateFilePath/$fileName');
-                                    await setUserImages(allImages);
+                                    await SPOperations.setUserImages(allImages);
 
                                     getxController.userImages.value = allImages;
                                     print(getxController.userImages.value);
@@ -113,7 +110,7 @@ class AddingPage extends StatelessWidget {
                           TextField(
                             onTap: (){
                             },
-                            //controller: titleEditTextController,
+                            controller: titleTextEditController,
                             style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Quicksand',),
                             decoration: InputDecoration(border: InputBorder.none, hintText:"Burası Neresi?"),
                             onSubmitted: (value){
@@ -131,8 +128,7 @@ class AddingPage extends StatelessWidget {
 
                             },
                             maxLines: null,
-                            //focusNode: noteFocus,
-                            //controller: noteEditTextController,
+                            controller: descTextEditController,
                             style:  TextStyle(fontFamily: 'Quicksand',),
                             decoration:  InputDecoration(border: InputBorder.none, hintText: "Kısa bir açıklama ekleyebilirsiniz"),
 
@@ -154,18 +150,21 @@ class AddingPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+          List<String> imageList = [];
+
           for(String filePath in getxController.userImages.value){
             File file   =File(filePath);
             var profileRef = FirebaseStorage.instance.ref("Images/HomeCategoriesContents/${whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
-
-            profileRef.putFile(file).whenComplete(() async{
+            await profileRef.putFile(file).whenComplete(() async{
               String url = await profileRef.getDownloadURL();
-              await firebaseOperations.updateGallery(categoryId,url);
+              imageList.add(url);
             });
-            print(filePath);
+          }
 
-            }
-
+          print("before-----${imageList}");
+          Map<String,dynamic> userData = {"content":descTextEditController.text,"images":imageList, "path": whichCategory, "title" :titleTextEditController.text};
+          await firebaseOperations.addUserData(userData);
+          print("after-----${imageList}");
         },
         label: const Text('Gönder'),
         icon: const Icon(Icons.send_rounded),
@@ -175,5 +174,15 @@ class AddingPage extends StatelessWidget {
 
 
     );
+  }
+
+  Future<String> uploadImagetoStorage({required String filePath})async {
+    File file   =File(filePath);
+    String url="";
+    var profileRef = FirebaseStorage.instance.ref("Images/HomeCategoriesContents/${whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
+    await profileRef.putFile(file).whenComplete(() async{
+      url = await profileRef.getDownloadURL();
+    });
+    return url;
   }
 }
