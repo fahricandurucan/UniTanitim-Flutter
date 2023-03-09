@@ -36,9 +36,6 @@ class _CommentsPageState extends State<CommentsPage> {
   final commentEditTextController = TextEditingController();
   late FocusNode titleFocus;
   final titleEditTextController = TextEditingController();
-
-
-  final titleEditTextController2 = TextEditingController();
   var TextFormFieldKey = GlobalKey();
 
 
@@ -138,7 +135,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           suffixIcon: GestureDetector(
                               onTap: (){
                                 if(commentController.text!=""){
-                                  Comment comment = Comment(comment: commentController.text, title: "kampüs",
+                                  Comment comment = Comment(comment: commentController.text, title: titleEditTextController.text,
                                       date: widget.currentTime, likes: 0, placeId: widget.placeId, commentId: "null", isLiked: false);
                                   firestore.addComments2(comment);
                                   Get.snackbar(
