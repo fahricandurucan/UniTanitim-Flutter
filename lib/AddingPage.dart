@@ -179,7 +179,7 @@ class AddingPage extends StatelessWidget {
   Future<String> uploadImagetoStorage({required String filePath})async {
     File file   =File(filePath);
     String url="";
-    var profileRef = FirebaseStorage.instance.ref("Images/HomeCategoriesContents/${whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
+    var profileRef = FirebaseStorage.instance.ref("userData${whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
     await profileRef.putFile(file).whenComplete(() async{
       url = await profileRef.getDownloadURL();
     });
