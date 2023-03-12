@@ -24,6 +24,6 @@ Future<bool> getCommentId(String commentId)async{
   var comment = await SharedPreferences.getInstance();
 
   bool? state = await comment.getBool("${commentId}") ?? true;
-  print("$commentId  ---- $state)");
+  //print("$commentId  ---- $state)");
   return state;
 }

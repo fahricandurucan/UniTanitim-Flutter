@@ -25,7 +25,6 @@ class Comment{
     return Comment(
       comment: map['comment'] as String,
       title: map['title'] as String,
-
       date: map['date'] as String,
       likes: map['likes'] as int,
       placeId: map['placeId'] as String,

@@ -59,13 +59,15 @@ class FirebaseOperations{
 
 
   Future<List<Comment>> getComments2({required String placeId})async{
-    print("place Id --------- ${placeId}");
     var commentsDocument =await firestore.collection("userComments").where("placeId", isEqualTo: placeId).get();
     List<Comment> commentsList = [];
+    int count=0;
     for(var i in commentsDocument.docs){
       bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
       commentsList.add(Comment.fromMap(i.data(),likeStatus));
+      count++;
     }
+    print("place Id --------- ${placeId} comment count : ${count}");
     return commentsList;
   }
 

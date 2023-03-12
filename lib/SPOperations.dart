@@ -24,7 +24,7 @@ class SPOperations{
    static Future<bool> getLikeStatus(String commentId)async{
     var comment = await SharedPreferences.getInstance();
     bool? state = await comment.getBool("${commentId}") ?? false;
-    print("$commentId  ---- $state)");
+    //print("$commentId  ---- $state)");
     return state;
   }
 }

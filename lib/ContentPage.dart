@@ -164,7 +164,7 @@ class _ContentPageState extends State<ContentPage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: ()async{
-          await getxController.getCommentsGetX(placeId: widget.category.categoryId);
+          //await getxController.getCommentsGetX(placeId: widget.category.categoryId);
           Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsPage(placeId: widget.category.categoryId,)));
 
           // Comment comment =Comment(comment: "Mühendis Yorum2", title: "Mühhhh", date: currentTime, likes: 0, placeId: categoryId);

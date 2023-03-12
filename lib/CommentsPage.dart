@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,9 +57,68 @@ class _CommentsPageState extends State<CommentsPage> {
   void initState() {
     commentFocus = FocusNode();
     titleFocus = FocusNode();
+    getCommentsPaginated(placeId: widget.placeId);
+
+    scrollController.addListener(() {
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
+        getCommentsPaginated(placeId: widget.placeId);
+      }
+    });
+
     //firestore.getComments2(placeId: widget.placeId);
     super.initState();
   }
+
+
+  DocumentSnapshot? lastDocument;
+  bool moreData = true;
+  var list = [];
+  bool loadingData = false;
+  final ScrollController scrollController = ScrollController();
+
+  Future<void> getCommentsPaginated({required String placeId})async{
+
+    if(moreData){
+      setState(() {
+        loadingData = true;
+      });
+      late var querySnapshot;
+
+      final collectionReference = firestore.firestore.collection("userComments").where("placeId", isEqualTo: placeId);
+
+      if(lastDocument == null){
+        querySnapshot =await collectionReference.limit(7).get();
+      }else{
+        querySnapshot = await collectionReference.limit(7).startAfterDocument(lastDocument!).get();
+      }
+
+      lastDocument = querySnapshot.docs.last;
+      int count = 0;
+      for(var i in querySnapshot.docs){
+        bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
+        list.add(Comment.fromMap(i.data(),likeStatus));
+        count++;
+      }
+      Timer(Duration(seconds: 3), () {
+        setState(() {
+          loadingData =false;
+          print("place Id --------- ${placeId} comment count : ${count}");
+        });
+      });
+
+      print("length of list --------- ${list.length} ");
+
+
+      if(querySnapshot.docs.length < 7){
+        moreData = false;
+      }
+    }else{
+      print("No More Data");
+    }
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +144,15 @@ class _CommentsPageState extends State<CommentsPage> {
             print("kland");
           },
 
-          child: Obx(()=>ListView(
+          child: ListView(
+            controller: scrollController,
             children: [
-              for(var c in getxController.comments)
+              for(var c in list)
                 CommentWidget2(comment:c),
+              loadingData?Center(child: CircularProgressIndicator(),):SizedBox(),
               SizedBox(height: 70,),
             ],
-          ),)
+          ),
         ),
 
         floatingActionButton: Padding(
