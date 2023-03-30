@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uni_tanitim/FirebaseOperations.dart';
 import 'package:uni_tanitim/models/Category.dart';
-import 'package:uni_tanitim/widgets/youtubePlayerWidget.dart';
+import 'package:uni_tanitim/widgets/youtubeVideoPlayer.dart';
 
 import 'GetxControllerClass.dart';
 
@@ -26,6 +26,7 @@ class VideosViewPage extends StatelessWidget {
               child: ListView(
                 children: [
                   SizedBox(height: 50,),
+
                   for(String videoLink in videos)
                     Container(
                       margin: EdgeInsets.all(8),
@@ -33,7 +34,7 @@ class VideosViewPage extends StatelessWidget {
                       height: 180,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: YoutubePlayerWidget(videoLink: videoLink)
+                          child: YoutubeVideoPlayer(videoLink)
                       ),
                     ),
 

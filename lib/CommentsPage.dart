@@ -108,7 +108,6 @@ class _CommentsPageState extends State<CommentsPage> {
 
       print("length of list --------- ${list.length} ");
 
-
       if(querySnapshot.docs.length < 7){
         moreData = false;
       }

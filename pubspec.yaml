@@ -38,6 +38,7 @@ dependencies:
   youtube_player_flutter: ^8.1.1
   path:
   get: ^4.6.5
+  flutter_inappwebview: ^5.7.2+3
   shared_preferences: ^2.0.15
   flutter_tts: ^3.6.2
   file_picker: ^5.2.3
