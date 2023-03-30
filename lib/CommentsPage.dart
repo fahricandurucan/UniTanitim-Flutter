@@ -72,50 +72,8 @@ class _CommentsPageState extends State<CommentsPage> {
 
   DocumentSnapshot? lastDocument;
   bool moreData = true;
-  var list = [];
   bool loadingData = false;
   final ScrollController scrollController = ScrollController();
-
-  Future<void> getCommentsPaginated({required String placeId})async{
-
-    if(moreData){
-      setState(() {
-        loadingData = true;
-      });
-      late var querySnapshot;
-
-      final collectionReference = firestore.firestore.collection("userComments").where("placeId", isEqualTo: placeId);
-
-      if(lastDocument == null){
-        querySnapshot =await collectionReference.limit(7).get();
-      }else{
-        querySnapshot = await collectionReference.limit(7).startAfterDocument(lastDocument!).get();
-      }
-
-      lastDocument = querySnapshot.docs.last;
-      int count = 0;
-      for(var i in querySnapshot.docs){
-        bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
-        list.add(Comment.fromMap(i.data(),likeStatus));
-        count++;
-      }
-      Timer(Duration(seconds: 3), () {
-        setState(() {
-          loadingData =false;
-          print("place Id --------- ${placeId} comment count : ${count}");
-        });
-      });
-
-      print("length of list --------- ${list.length} ");
-
-      if(querySnapshot.docs.length < 7){
-        moreData = false;
-      }
-    }else{
-      print("No More Data");
-    }
-  }
-
 
 
 
@@ -143,15 +101,15 @@ class _CommentsPageState extends State<CommentsPage> {
             print("kland");
           },
 
-          child: ListView(
+          child: Obx(()=> ListView(
             controller: scrollController,
             children: [
-              for(var c in list)
+              for(var c in getxController.comments)
                 CommentWidget2(comment:c),
               loadingData?Center(child: CircularProgressIndicator(),):SizedBox(),
               SizedBox(height: 70,),
             ],
-          ),
+          ),)
         ),
 
         floatingActionButton: Padding(
@@ -231,6 +189,57 @@ class _CommentsPageState extends State<CommentsPage> {
         ,
       ),
     );
+
+
+
+  }
+
+
+
+
+
+
+
+
+  Future<void> getCommentsPaginated({required String placeId})async{
+
+    if(moreData){
+      setState(() {
+        loadingData = true;
+      });
+      late var querySnapshot;
+
+      final collectionReference = firestore.firestore.collection("userComments").where("placeId", isEqualTo: placeId);
+
+      if(lastDocument == null){
+        querySnapshot =await collectionReference.limit(7).get();
+      }else{
+        querySnapshot = await collectionReference.limit(7).startAfterDocument(lastDocument!).get();
+      }
+
+      lastDocument = querySnapshot.docs.last;
+      int count = 0;
+      for(var i in querySnapshot.docs){
+        bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
+        //commentList.add(Comment.fromMap(i.data(),likeStatus));
+        getxController.comments.add(Comment.fromMap(i.data(),likeStatus));
+        count++;
+      }
+      Timer(Duration(seconds: 2), () {
+        setState(() {
+          loadingData =false;
+          print("place Id --------- ${placeId} comment count : ${count}");
+        });
+      });
+
+      print("length of list --------- ${getxController.comments.length} ");
+
+      if(querySnapshot.docs.length < 7){
+        moreData = false;
+      }
+    }else{
+      print("No More Data");
+    }
   }
 }
 

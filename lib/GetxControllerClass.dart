@@ -41,6 +41,7 @@ class GetxControllerClass extends GetxController{
   // }
 
   void updateComments(int index, Comment comment){
+    print("yourm güncellendi --------------- >>>>> ${comment.isLiked}");
     comments[index] = comment;
   }
 

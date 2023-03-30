@@ -21,18 +21,19 @@ class ImageGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List allImageList = getxController.userImages.value;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
-      height: 100,//allImageList.length>0 ?(allImageList.length<=4? 100:200):0,
+      height: allImageList.length>0 ?(allImageList.length<=4? 100:200):0,
       child: Obx((){
-        List allImageList = getxController.userImages.value;
-        print("---------- ${allImageList}");
+        List allImageList2 = getxController.userImages;
+        print("---------- ${allImageList2}");
         return GridView.builder(
             scrollDirection: Axis.horizontal,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,//allImageList.length>4 ?2:1,
             ),
-            itemCount: allImageList.length,// allImageList.length,
+            itemCount: allImageList2.length,// allImageList.length,
             itemBuilder: (context, index){
               return GestureDetector(
                 onTap: (){
@@ -48,14 +49,14 @@ class ImageGridView extends StatelessWidget {
                       children: [
                         Container(
                           height: 100,width: 100,
-                          child: Image.file(File(allImageList[index]),fit: BoxFit.fill,),
+                          child: Image.file(File(allImageList2[index]),fit: BoxFit.fill,),
                         ),
 
                         GestureDetector(
                             onTap: ()async{
-                              int isDeleted= await deleteFile(File(allImageList[index]));
+                              int isDeleted= await deleteFile(File(allImageList2[index]));
                               if(isDeleted ==1){
-                                List<String> updatedList = [...allImageList.where((element ) => element!=allImageList[index]).toList()];
+                                List<String> updatedList = [...allImageList2.where((element ) => element!=allImageList2[index]).toList()];
                                 SPOperations.setUserImages(updatedList);
                                 getxController.userImages.value=updatedList;
                               }
