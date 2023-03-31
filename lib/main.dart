@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uni_tanitim/CategoryPage.dart';
 import 'package:uni_tanitim/Homepage.dart';
-import 'package:uni_tanitim/AnimatedImageWidget.dart';
+import 'package:uni_tanitim/widgets/EnesAnimatedImageWidget.dart';
+import 'package:uni_tanitim/widgets/EnesShowUpText.dart';
 
 import 'ContentPage.dart';
 import 'firebase_options.dart';

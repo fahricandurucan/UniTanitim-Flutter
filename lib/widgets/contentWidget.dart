@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uni_tanitim/widgets/EnesShowUpText.dart';
 
 class ContentWidget extends StatelessWidget {
   String? title;
@@ -26,7 +27,7 @@ class ContentWidget extends StatelessWidget {
                 ),
               ],
             ):SizedBox(),
-            content!=""?Text(content, style: TextStyle(fontSize: 16,color: Colors.black87,  decoration: TextDecoration.none)): SizedBox(),
+            content!=""?EnesShowUpText(text: content): SizedBox(),
             if(imageLink!="")
             Image.network(imageLink!)
         ],
