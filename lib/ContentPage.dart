@@ -8,6 +8,7 @@ import 'package:uni_tanitim/CommentsPage.dart';
 import 'package:uni_tanitim/FirebaseOperations.dart';
 import 'package:uni_tanitim/ImagesViewPage.dart';
 import 'package:uni_tanitim/VideosViewPage.dart';
+import 'package:uni_tanitim/AnimatedImageWidget.dart';
 import 'package:uni_tanitim/widgets/contentWidget.dart';
 import 'package:uni_tanitim/widgets/linkWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -111,7 +112,7 @@ class _ContentPageState extends State<ContentPage> {
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 children: [
-                  Image.network(widget.category.coverImage,fit: BoxFit.cover),
+                  AnimatedImageWidget(Image.network(widget.category.coverImage,fit: BoxFit.cover)),
                 ],
               ),
             ),
