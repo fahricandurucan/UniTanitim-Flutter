@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uni_tanitim/CategoryPage.dart';
 import 'package:uni_tanitim/FirebaseOperations.dart';
+import 'package:uni_tanitim/widgets/mainCategories2.dart';
 
 import 'GetxControllerClass.dart';
 
@@ -20,6 +21,9 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin 
 
     @override
   void initState() {
+
+
+
       _controller = AnimationController(
         duration: const Duration(milliseconds: 3000),
         vsync: this,

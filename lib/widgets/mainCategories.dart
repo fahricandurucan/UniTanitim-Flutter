@@ -20,7 +20,6 @@ class MainCategories extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
 
-
             child: Image.network(category.coverImage, fit: BoxFit.cover, color: Colors.white.withOpacity(0.5),
               colorBlendMode: BlendMode.modulate,
               errorBuilder: (BuildContext context, Object exception,
