@@ -35,12 +35,13 @@ class GetxControllerClass extends GetxController{
     places.value = list;
   }
 
-  Future<void> getCommentsGetX({required String placeId})async{
-    List<Comment> commentList = await firebaseOperations.getComments2(placeId: placeId);
-    comments.value = commentList;
-  }
+  // Future<void> getCommentsGetX({required String placeId})async{
+  //   List<Comment> commentList = await firebaseOperations.getComments2(placeId: placeId);
+  //   comments.value = commentList;
+  // }
 
   void updateComments(int index, Comment comment){
+    print("yourm güncellendi --------------- >>>>> ${comment.isLiked}");
     comments[index] = comment;
   }
 

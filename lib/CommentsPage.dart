@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,9 +38,6 @@ class _CommentsPageState extends State<CommentsPage> {
   final commentEditTextController = TextEditingController();
   late FocusNode titleFocus;
   final titleEditTextController = TextEditingController();
-
-
-  final titleEditTextController2 = TextEditingController();
   var TextFormFieldKey = GlobalKey();
 
 
@@ -58,9 +57,25 @@ class _CommentsPageState extends State<CommentsPage> {
   void initState() {
     commentFocus = FocusNode();
     titleFocus = FocusNode();
+    getCommentsPaginated(placeId: widget.placeId);
+
+    scrollController.addListener(() {
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
+        getCommentsPaginated(placeId: widget.placeId);
+      }
+    });
+
     //firestore.getComments2(placeId: widget.placeId);
     super.initState();
   }
+
+
+  DocumentSnapshot? lastDocument;
+  bool moreData = true;
+  bool loadingData = false;
+  final ScrollController scrollController = ScrollController();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +101,12 @@ class _CommentsPageState extends State<CommentsPage> {
             print("kland");
           },
 
-          child: Obx(()=>ListView(
+          child: Obx(()=> ListView(
+            controller: scrollController,
             children: [
               for(var c in getxController.comments)
                 CommentWidget2(comment:c),
+              loadingData?Center(child: CircularProgressIndicator(),):SizedBox(),
               SizedBox(height: 70,),
             ],
           ),)
@@ -138,7 +155,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           suffixIcon: GestureDetector(
                               onTap: (){
                                 if(commentController.text!=""){
-                                  Comment comment = Comment(comment: commentController.text, title: "kampüs",
+                                  Comment comment = Comment(comment: commentController.text, title: titleEditTextController.text,
                                       date: widget.currentTime, likes: 0, placeId: widget.placeId, commentId: "null", isLiked: false);
                                   firestore.addComments2(comment);
                                   Get.snackbar(
@@ -172,6 +189,57 @@ class _CommentsPageState extends State<CommentsPage> {
         ,
       ),
     );
+
+
+
+  }
+
+
+
+
+
+
+
+
+  Future<void> getCommentsPaginated({required String placeId})async{
+
+    if(moreData){
+      setState(() {
+        loadingData = true;
+      });
+      late var querySnapshot;
+
+      final collectionReference = firestore.firestore.collection("userComments").where("placeId", isEqualTo: placeId);
+
+      if(lastDocument == null){
+        querySnapshot =await collectionReference.limit(7).get();
+      }else{
+        querySnapshot = await collectionReference.limit(7).startAfterDocument(lastDocument!).get();
+      }
+
+      lastDocument = querySnapshot.docs.last;
+      int count = 0;
+      for(var i in querySnapshot.docs){
+        bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
+        //commentList.add(Comment.fromMap(i.data(),likeStatus));
+        getxController.comments.add(Comment.fromMap(i.data(),likeStatus));
+        count++;
+      }
+      Timer(Duration(seconds: 2), () {
+        setState(() {
+          loadingData =false;
+          print("place Id --------- ${placeId} comment count : ${count}");
+        });
+      });
+
+      print("length of list --------- ${getxController.comments.length} ");
+
+      if(querySnapshot.docs.length < 7){
+        moreData = false;
+      }
+    }else{
+      print("No More Data");
+    }
   }
 }
 

@@ -81,10 +81,24 @@ class AddingPage extends StatelessWidget {
                               SizedBox(width: 5,),
                               GestureDetector(
                                 onTap: ()async{
-                                  await ImagePicker().pickImage(
+                                  XFile? file  = await ImagePicker().pickImage(
                                       source: ImageSource.camera,
                                       imageQuality: 75
                                   );
+
+                                  if (file != null){
+                                    final Directory duplicateFileDir = await getApplicationDocumentsDirectory();
+                                    String duplicateFilePath = duplicateFileDir.path;
+                                    final fileName = basename(file.path);
+                                    await file.saveTo('$duplicateFilePath/$fileName');
+
+                                    List<String> allImages = await SPOperations.getUserImages();
+                                    allImages.add('$duplicateFilePath/$fileName');
+                                    await SPOperations.setUserImages(allImages);
+
+                                    getxController.userImages.value = allImages;
+                                    print(getxController.userImages.value);
+                                  }
                                 },
                                   child: Image.asset("assets/add_image_camera.png", height: 25,))
 
