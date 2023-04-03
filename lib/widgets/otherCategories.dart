@@ -15,22 +15,22 @@ class OtherCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("*****diger list lenght : "+digerList.length.toString());
     return GridView.builder(
         itemCount: digerList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           childAspectRatio:1,
-
         ),
         itemBuilder: (context,indeks){
           return Column(
             children: [
               GestureDetector(
                 onTap: (){
-                  for(Category i in getxController.places.value){
-                    print(i.contents);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(category: i,)));
-                  }
+                  Category c = digerList[indeks];
+                  print("************* other cotegori *********** : ${c.categoryName}");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(category: c,)));
+
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -46,9 +46,7 @@ class OtherCategories extends StatelessWidget {
                     Container(
                         height: 70,
                         width: 70,
-                        child:
-                        Image.network(digerList[indeks].coverImage,fit: BoxFit.cover,)
-
+                        child: Image.network(digerList[indeks].coverImage,fit: BoxFit.cover,)
                     ),
                   ],
                 ),
