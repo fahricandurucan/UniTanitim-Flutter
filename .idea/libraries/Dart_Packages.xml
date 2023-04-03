@@ -173,7 +173,7 @@
         <entry key="flutter_inappwebview">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview-5.7.2/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview-5.7.2+3/lib" />
             </list>
           </value>
         </entry>
@@ -637,7 +637,7 @@
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage-11.0.2/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_platform_interface-4.1.21/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_web-3.3.12/lib" />
-      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview-5.7.2/lib" />
+      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview-5.7.2+3/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-1.0.4/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.7/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_tts-3.6.2/lib" />
