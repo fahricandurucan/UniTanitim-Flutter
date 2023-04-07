@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 
 class ImageViewPage extends StatelessWidget {
 
@@ -33,7 +34,19 @@ class ImageViewPage extends StatelessWidget {
                       return Stack(
                         alignment: Alignment.bottomCenter,
                         children: [
-                          Image.network(galeriImage[index],fit: BoxFit.cover,),
+                          FullScreenWidget(
+                            child: Center(
+                              child: Hero(
+                                tag: "imageTag",
+                                child: InteractiveViewer(
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.network(galeriImage[index],fit: BoxFit.cover,)),
+                                ),
+                              ),
+                            ),
+                          ),
+
                           Text("shfsudfg",style: TextStyle(fontSize: 16,  decoration: TextDecoration.none, color: Colors.black)),
                         ],
                       );

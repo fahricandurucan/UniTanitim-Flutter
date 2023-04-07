@@ -46,7 +46,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   List<String> galeriImages = ["image link 1","image link 2"];
                   List<String> videos = ["video link 1","video link 2"];
                   Category category = Category(
-                      categoryName: "Kantin",
+                      categoryName: "Gece Kulübü",
                       contents: [content1.toMap(),content1.toMap(),content1.toMap(), content1.toMap(),content1.toMap(),
                         content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),
                         content1.toMap(),content1.toMap(),content1.toMap()],
