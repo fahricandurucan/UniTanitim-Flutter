@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class AnimatedImageWidget extends StatefulWidget {
+class EAnimatedImageWidget extends StatefulWidget {
   late Image image;
 
-  AnimatedImageWidget(this.image);
+  EAnimatedImageWidget(this.image);
 
   @override
-  _AnimatedImageWidgetState createState() => _AnimatedImageWidgetState();
+  _EAnimatedImageWidgetState createState() => _EAnimatedImageWidgetState();
 }
 
-class _AnimatedImageWidgetState extends State<AnimatedImageWidget> with SingleTickerProviderStateMixin {
+class _EAnimatedImageWidgetState extends State<EAnimatedImageWidget> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override

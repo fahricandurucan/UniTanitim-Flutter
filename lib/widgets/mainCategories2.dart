@@ -89,7 +89,8 @@ class _MainCategories2State extends State<MainCategories2> {
                               SizedBox(height: 90,),
                               InkWell(
                                onTap: (){
-                                 Get.to(ContentPage(category: widget.list[index]));
+                                 Get.to(() => ContentPage(category: widget.list[index]));
+                                 //Get.to(ContentPage(category: widget.list[index]));
                                },
                                child: Container(
                                 width: double.infinity,

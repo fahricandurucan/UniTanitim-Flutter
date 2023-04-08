@@ -27,10 +27,7 @@ class OtherCategories extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: (){
-                  for(Category i in getxController.places.value){
-                    print(i.contents);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(category: i,)));
-                  }
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ContentPage(category: digerList[indeks],)));
                 },
                 child: Stack(
                   alignment: Alignment.center,

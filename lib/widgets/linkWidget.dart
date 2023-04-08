@@ -7,6 +7,7 @@ class LinkWidget extends StatelessWidget {
 
   LinkWidget({required this.link, required this.imageLink});
 
+
   @override
   Widget build(BuildContext context) {
     return Container(

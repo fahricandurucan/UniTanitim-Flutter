@@ -40,34 +40,33 @@ class _CategoryPageState extends State<CategoryPage> {
           children: [
 
             //***** KATEGORİ EKLEME BUTONU  ****
-            ElevatedButton(
-                onPressed: (){
-                  Content content1 = Content(content: "", title: "", image: "");
-                  List<String> galeriImages = ["image link 1","image link 2"];
-                  List<String> videos = ["video link 1","video link 2"];
-                  Category category = Category(
-                      categoryName: "Kantin",
-                      contents: [content1.toMap(),content1.toMap(),content1.toMap(), content1.toMap(),content1.toMap(),
-                        content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),
-                        content1.toMap(),content1.toMap(),content1.toMap()],
-                      description: "Açıklama",
-                      coverImage: "Resim",
-                      universityId:"mskü",
-                      galleryImages: galeriImages,
-                      videos: videos,
-                      categoryId: '',
-                      isOther :1,
-
-                  );
-                  firestore.addData2(category, widget.title);
-                },
-
-                onLongPress: (){
-
-                },
-                child: Text("${widget.title}'e Kategori Ekle")
-            ),
-            Text("Diğer için basılı tut"),
+            // ElevatedButton(
+            //     onPressed: (){
+            //       Content content1 = Content(content: "", title: "", image: "");
+            //       List<String> galeriImages = ["image link 1","image link 2"];
+            //       List<String> videos = ["video link 1","video link 2"];
+            //       Category category = Category(
+            //           categoryName: "Kantin",
+            //           contents: [content1.toMap(),content1.toMap(),content1.toMap(), content1.toMap(),content1.toMap(),
+            //             content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),content1.toMap(),
+            //             content1.toMap(),content1.toMap(),content1.toMap()],
+            //           description: "Açıklama",
+            //           coverImage: "Resim",
+            //           universityId:"mskü",
+            //           galleryImages: galeriImages,
+            //           videos: videos,
+            //           categoryId: '',
+            //           isOther :1,
+            //
+            //       );
+            //       firestore.addData2(category, widget.title);
+            //     },
+            //
+            //     onLongPress: (){
+            //
+            //     },
+            //     child: Text("${widget.title}'e Kategori Ekle")
+            // ),
 
             Padding(
               padding: EdgeInsets.only(left: 15),
@@ -75,23 +74,6 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
 
             MainCategories2(getxController.places.value.where((element) => element.isOther ==0).toList()),
-
-
-           // Padding(
-           //   padding: EdgeInsets.only(bottom: 15),
-           //   child: Container(
-           //     height: 300,
-           //     child: ListView(
-           //       shrinkWrap: true,
-           //       scrollDirection: Axis.horizontal,
-           //       children: [
-           //
-           //         // for(Category category in getxController.places.value.where((element) => element.isOther ==0))
-           //         //   MainCategories(category: category,),
-           //       ],
-           //     ),
-           //   ),
-           // ),
 
 
             Padding(

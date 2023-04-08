@@ -5,11 +5,11 @@ class Content{
 
   Content({this.title, required this.content, this.image});
 
-  Map<String, dynamic> toMap() {
+  Map<String, String> toMap() {
     return {
-      'title': this.title,
+      'title': this.title.toString(),
       'content': this.content,
-      'image': this.image,
+      'image': this.image.toString(),
     };
   }
 

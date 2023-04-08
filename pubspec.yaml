@@ -51,6 +51,7 @@ dependencies:
   provider: ^6.0.3
   palette_generator: ^0.3.3+2
   animated_text_kit: ^4.2.2
+  simple_circular_progress_bar: ^1.0.2
 
 
 

@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-class EnesShowUpText extends StatefulWidget {
+class EShowUpText extends StatefulWidget {
   final String text;
 
-  EnesShowUpText({required this.text});
+  EShowUpText({required this.text});
 
   @override
-  _EnesShowUpTextState createState() => _EnesShowUpTextState();
+  _EShowUpTextState createState() => _EShowUpTextState();
 }
 
-class _EnesShowUpTextState extends State<EnesShowUpText>
+class _EShowUpTextState extends State<EShowUpText>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
@@ -21,7 +21,7 @@ class _EnesShowUpTextState extends State<EnesShowUpText>
   void initState() {
     super.initState();
     _controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
     _translateAnimation = Tween<double>(begin: 50.0, end: 0.0).animate(
         CurvedAnimation(parent: _controller, curve: Curves.easeOut));
@@ -38,7 +38,7 @@ class _EnesShowUpTextState extends State<EnesShowUpText>
           child: Opacity(
             opacity: _opacityAnimation.value,
             child: Text(widget.text,
-              style: TextStyle(fontSize: 16,color: Colors.black87,  decoration: TextDecoration.none),
+              style: TextStyle(fontSize: 18,color: Colors.black87,  decoration: TextDecoration.none, fontWeight: FontWeight.w300),
             ),
           ),
         );

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +10,9 @@ import 'package:uni_tanitim/CommentsPage.dart';
 import 'package:uni_tanitim/FirebaseOperations.dart';
 import 'package:uni_tanitim/ImagesViewPage.dart';
 import 'package:uni_tanitim/VideosViewPage.dart';
-import 'package:uni_tanitim/widgets/EnesAnimatedImageWidget.dart';
+import 'package:uni_tanitim/models/Content.dart';
+import 'package:uni_tanitim/widgets/EAnimatedImageWidget.dart';
+import 'package:uni_tanitim/widgets/EExpandableWidget.dart';
 import 'package:uni_tanitim/widgets/contentWidget.dart';
 import 'package:uni_tanitim/widgets/linkWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,10 +35,11 @@ class ContentPage extends StatefulWidget {
 class _ContentPageState extends State<ContentPage> {
   late PaletteGenerator generator;
   Color appbarColor = Colors.black;
-
   FirebaseOperations firebaseOperations = FirebaseOperations();
-
   GetxControllerClass getxController = Get.put(GetxControllerClass());
+  var currentIndex = -1;
+
+
 
   @override
   void initState() {
@@ -46,42 +51,9 @@ class _ContentPageState extends State<ContentPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery. of(context). size. width;
-    return Scaffold(
-      //   !!!!******** APPBAR I ÖZELLEŞTİRDİĞİM İÇİN BURASI SİLİNEBİLİR *********!!!!
+    var contents = contentList();
 
-      // appBar: PreferredSize(
-      //     preferredSize: Size.fromHeight(50.0), // here the desired height
-      //     child: AppBar(
-      //       backgroundColor: Colors.black87,
-      //       title: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //
-      //           Flexible(child: Text(category.categoryName, style: TextStyle(color: Colors.white, fontSize: 17),overflow: TextOverflow.fade,)),
-      //
-      //           Container(
-      //             margin: EdgeInsets.only(top: 7,bottom: 7,left: 15),
-      //             padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      //             decoration: BoxDecoration(border: Border.all(color: Colors.white,width: 1.5), borderRadius: BorderRadius.circular(12)) ,
-      //             alignment: Alignment.center,
-      //             child: GestureDetector(
-      //               onTap: (){
-      //                 Get.to(AddingPage(categoryId: category.categoryId, whichCategory: category.categoryName));
-      //               },
-      //               child: Row(
-      //                 children: [
-      //                   Text("Ekleme Yap ",style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w300)),
-      //                   Icon(Icons.add, color: Colors.white,)
-      //                 ],
-      //               ),
-      //             ) ,
-      //           ),
-      //
-      //         ],
-      //       ),
-      //     )
-      // ),
-      // backgroundColor: Color(0xffececec),
+    return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -91,7 +63,11 @@ class _ContentPageState extends State<ContentPage> {
                 width: 150,
                 margin: EdgeInsets.only(top: 7,bottom: 7,left: 15),
                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                decoration: BoxDecoration(border: Border.all(color: Colors.white,width: 1.5), borderRadius: BorderRadius.circular(12)) ,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white,width: 1.5),
+                    borderRadius: BorderRadius.circular(12),
+                  color: Color(0x64000000)
+                ) ,
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: (){
@@ -112,7 +88,7 @@ class _ContentPageState extends State<ContentPage> {
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 children: [
-                  AnimatedImageWidget(Image.network(widget.category.coverImage,fit: BoxFit.cover)),
+                  EAnimatedImageWidget(Image.network(widget.category.coverImage,fit: BoxFit.cover, width: double.infinity,height: double.infinity,)),
                 ],
               ),
             ),
@@ -155,8 +131,14 @@ class _ContentPageState extends State<ContentPage> {
                       ),
                     ],
                   ),
-                  for(var content in widget.category.contents)
-                    showContent(content),
+
+
+                  showContent(widget.category.contents.first),
+                  SizedBox(height: 30,),
+                  EExpandableWidget(contentList()),
+                  SizedBox(height: 30,),
+
+
                 ]
               ),
           ),
@@ -165,12 +147,7 @@ class _ContentPageState extends State<ContentPage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: ()async{
-          //await getxController.getCommentsGetX(placeId: widget.category.categoryId);
           Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsPage(placeId: widget.category.categoryId,)));
-
-          // Comment comment =Comment(comment: "Mühendis Yorum2", title: "Mühhhh", date: currentTime, likes: 0, placeId: categoryId);
-          // firebaseOperations.addComments(comment: comment);
-          // firebaseOperations.addComments2(comment);
         },
         child: Icon(Icons.comment),
       ),
@@ -195,8 +172,33 @@ class _ContentPageState extends State<ContentPage> {
   void appbarColorSet() async{
     generator = await PaletteGenerator.fromImageProvider(NetworkImage(widget.category.coverImage));
     setState(() {
-      appbarColor = generator.dominantColor!.color;
+     // appbarColor = generator.dominantColor!.color;
     });
 
   }
+
+  List contentList(){
+    var result=[];
+    int startIndex = 0;
+    for(int i=0;i< widget.category.contents.length;i++){
+      if(widget.category.contents[i]["title"].startsWith("#")){
+        result.add(widget.category.contents.sublist(startIndex,i));
+        startIndex=i;
+      }
+    }
+
+    result.add(widget.category.contents.sublist(startIndex, widget.category.contents.length));
+    result.removeAt(0);
+
+    return result;
+  }
+
+
+
+
+
+
+
 }
+
+

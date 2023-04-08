@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uni_tanitim/widgets/EnesShowUpText.dart';
+import 'package:uni_tanitim/widgets/EShowUpText.dart';
 
 class ContentWidget extends StatelessWidget {
   String? title;
   String content;
   String? imageLink;
-  double titleFontSize;
 
-  ContentWidget({this.title, required this.content, this.imageLink, this.titleFontSize=18});
+  ContentWidget({this.title, required this.content, this.imageLink});
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +17,20 @@ class ContentWidget extends StatelessWidget {
         children: [
             title!=""? Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(title!, style: TextStyle(fontSize: titleFontSize,  decoration: TextDecoration.none, color: Colors.black)),
+                    padding: const EdgeInsets.only(top: 25, bottom: 8),
+                    child: Text(title!.substring(1), style: TextStyle(fontSize:20,  decoration: TextDecoration.none, color: Colors.black)),
                   ),
                 ),
               ],
             ):SizedBox(),
-            content!=""?EnesShowUpText(text: content): SizedBox(),
+            content!=""?EShowUpText(text: content): SizedBox(),
             if(imageLink!="")
-            Image.network(imageLink!)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Image.network(imageLink!),
+            )
         ],
       ),
     );

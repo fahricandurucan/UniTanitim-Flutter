@@ -7,6 +7,7 @@ import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:uni_tanitim/widgets/commentWidget2.dart';
 
 import 'FirebaseOperations.dart';
@@ -59,6 +60,8 @@ class _CommentsPageState extends State<CommentsPage> {
     titleFocus = FocusNode();
     getCommentsPaginated(placeId: widget.placeId);
 
+
+
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
         getCommentsPaginated(placeId: widget.placeId);
@@ -83,10 +86,9 @@ class _CommentsPageState extends State<CommentsPage> {
 
     return WillPopScope(
       onWillPop: ()async{
-        print(" ıu gıug ıytfıyfıyftfd");
+        getxController.comments.clear();
         return true;
       },
-
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -106,8 +108,21 @@ class _CommentsPageState extends State<CommentsPage> {
             children: [
               for(var c in getxController.comments)
                 CommentWidget2(comment:c),
-              loadingData?Center(child: CircularProgressIndicator(),):SizedBox(),
-              SizedBox(height: 70,),
+              loadingData?Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top:20),
+                  child: SimpleCircularProgressBar(
+                    mergeMode: true,
+                    animationDuration: 1,
+                    size: 35,
+                    progressStrokeWidth: 4,
+                    backColor: Colors.transparent,
+                    progressColors: const [Colors.cyan, Colors.purple]),
+                ),
+
+              )
+                  :SizedBox(),
+              SizedBox(height: 200,),
             ],
           ),)
         ),
@@ -165,10 +180,10 @@ class _CommentsPageState extends State<CommentsPage> {
                                     colorText: Colors.white,
                                     backgroundColor: Color(0xae000000),);
 
-                                  commentController.clear();
-                                  titleEditTextController.clear();
-                                  FocusScope.of(context).unfocus();
-                                  getxController.titleVisibility.value = false;
+                                    commentController.clear();
+                                    titleEditTextController.clear();
+                                    FocusScope.of(context).unfocus();
+                                    getxController.titleVisibility.value = false;
                                 }
 
                               },
@@ -212,34 +227,50 @@ class _CommentsPageState extends State<CommentsPage> {
       final collectionReference = firestore.firestore.collection("userComments").where("placeId", isEqualTo: placeId);
 
       if(lastDocument == null){
-        querySnapshot =await collectionReference.limit(7).get();
+        querySnapshot =await collectionReference.limit(6).get();
       }else{
-        querySnapshot = await collectionReference.limit(7).startAfterDocument(lastDocument!).get();
+        querySnapshot = await collectionReference.limit(6).startAfterDocument(lastDocument!).get();
       }
 
-      lastDocument = querySnapshot.docs.last;
-      int count = 0;
-      for(var i in querySnapshot.docs){
-        bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
-        //commentList.add(Comment.fromMap(i.data(),likeStatus));
-        getxController.comments.add(Comment.fromMap(i.data(),likeStatus));
-        count++;
-      }
-      Timer(Duration(seconds: 2), () {
-        setState(() {
-          loadingData =false;
-          print("place Id --------- ${placeId} comment count : ${count}");
+
+      if(querySnapshot.docs.length>0){
+        lastDocument = querySnapshot.docs.last;
+        int count = 0;
+        // for(var i in querySnapshot.docs){
+        //   bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
+        //   //commentList.add(Comment.fromMap(i.data(),likeStatus));
+        //   getxController.comments.add(Comment.fromMap(i.data(),likeStatus));
+        //   count++;
+        // }
+        Timer(Duration(seconds: 1), () async{
+          for(var i in querySnapshot.docs){
+            bool likeStatus = await SPOperations.getLikeStatus(i["commentId"]) != true? false:true;
+            getxController.comments.add(Comment.fromMap(i.data(),likeStatus));
+            count++;
+          }
+          setState(() {
+            loadingData =false;
+            print("place Id --------- ${placeId} comment count : ${count}");
+          });
         });
-      });
 
-      print("length of list --------- ${getxController.comments.length} ");
+        print("length of list --------- ${getxController.comments.length} ");
 
-      if(querySnapshot.docs.length < 7){
-        moreData = false;
+        if(querySnapshot.docs.length < 6){
+          moreData = false;
+        }
+
+      }else{
+        setState(() {
+          print("No Data");
+          loadingData =false;
+        });
+
       }
-    }else{
-      print("No More Data");
+
     }
+
+
   }
 }
 
