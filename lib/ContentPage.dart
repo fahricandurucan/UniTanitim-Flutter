@@ -71,7 +71,7 @@ class _ContentPageState extends State<ContentPage> {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: (){
-                    Get.to(AddingPage(categoryId: widget.category.categoryId, whichCategory: widget.category.categoryName));
+                    Get.to(AddingPage2(categoryId: widget.category.categoryId, whichCategory: widget.category.categoryName));
                   },
                   child: Row(
                     children: [

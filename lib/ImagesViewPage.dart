@@ -34,7 +34,7 @@ class ImageViewPage extends StatelessWidget {
                         alignment: Alignment.bottomCenter,
                         children: [
                           Image.network(galeriImage[index],fit: BoxFit.cover,),
-                          Text("shfsudfg",style: TextStyle(fontSize: 16,  decoration: TextDecoration.none, color: Colors.black)),
+                          //Text("shfsudfg",style: TextStyle(fontSize: 16,  decoration: TextDecoration.none, color: Colors.black)),
                         ],
                       );
                     }

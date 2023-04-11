@@ -46,4 +46,6 @@ class GetxControllerClass extends GetxController{
   }
 
 
+
+
 }

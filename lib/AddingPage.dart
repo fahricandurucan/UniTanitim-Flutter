@@ -10,11 +10,17 @@ import 'package:uni_tanitim/GetxControllerClass.dart';
 import 'package:uni_tanitim/SPOperations.dart';
 import 'package:uni_tanitim/widgets/imageGridWidget.dart';
 
-class AddingPage extends StatelessWidget {
+
+class AddingPage2 extends StatefulWidget {
   String whichCategory;
   String categoryId;
-  AddingPage({required this.categoryId,required this.whichCategory});
+  AddingPage2({required this.categoryId,required this.whichCategory});
 
+  @override
+  State<AddingPage2> createState() => _AddingPage2State();
+}
+
+class _AddingPage2State extends State<AddingPage2> {
   @override
   Widget build(BuildContext context) {
     final titleTextEditController = TextEditingController();
@@ -56,50 +62,52 @@ class AddingPage extends StatelessWidget {
                               Text("Resim Ekle ",style: TextStyle(fontSize: 15,  fontWeight: FontWeight.w300)),
                               SizedBox(width: 10,),
                               GestureDetector(
-                                onTap: ()async{
-                                  XFile? file  = await ImagePicker().pickImage(
-                                      source: ImageSource.gallery,
-                                      imageQuality: 75
-                                  );
-                                  if (file != null){
-                                    final Directory duplicateFileDir = await getApplicationDocumentsDirectory();
-                                    String duplicateFilePath = duplicateFileDir.path;
-                                    final fileName = basename(file.path);
-                                    await file.saveTo('$duplicateFilePath/$fileName');
+                                  onTap: ()async{
+                                    XFile? file  = await ImagePicker().pickImage(
+                                        source: ImageSource.gallery,
+                                        imageQuality: 75
+                                    );
+                                    if (file != null){
+                                      final Directory duplicateFileDir = await getApplicationDocumentsDirectory();
+                                      String duplicateFilePath = duplicateFileDir.path;
+                                      final fileName = basename(file.path);
+                                      await file.saveTo('$duplicateFilePath/$fileName');
 
-                                    List<String> allImages = await SPOperations.getUserImages();
-                                    allImages.add('$duplicateFilePath/$fileName');
-                                    await SPOperations.setUserImages(allImages);
+                                      List<String> allImages = await SPOperations.getUserImages();
+                                      allImages.add('$duplicateFilePath/$fileName');
+                                      await SPOperations.setUserImages(allImages);
+                                      getxController.userImages.value = allImages;
+                                      print(getxController.userImages.value);
+                                      setState(() {
 
-                                    getxController.userImages.value = allImages;
-                                    print(getxController.userImages.value);
-                                  }
-                                },
+                                      });
+                                    }
+                                  },
                                   child: Image.asset("assets/add_image_gallery.png", height: 25,)),
                               SizedBox(width: 5,),
                               Container(height: double.infinity,width: 1, color: Colors.black87,),
                               SizedBox(width: 5,),
                               GestureDetector(
-                                onTap: ()async{
-                                  XFile? file  = await ImagePicker().pickImage(
-                                      source: ImageSource.camera,
-                                      imageQuality: 75
-                                  );
+                                  onTap: ()async{
+                                    XFile? file  = await ImagePicker().pickImage(
+                                        source: ImageSource.camera,
+                                        imageQuality: 75
+                                    );
 
-                                  if (file != null){
-                                    final Directory duplicateFileDir = await getApplicationDocumentsDirectory();
-                                    String duplicateFilePath = duplicateFileDir.path;
-                                    final fileName = basename(file.path);
-                                    await file.saveTo('$duplicateFilePath/$fileName');
+                                    if (file != null){
+                                      final Directory duplicateFileDir = await getApplicationDocumentsDirectory();
+                                      String duplicateFilePath = duplicateFileDir.path;
+                                      final fileName = basename(file.path);
+                                      await file.saveTo('$duplicateFilePath/$fileName');
 
-                                    List<String> allImages = await SPOperations.getUserImages();
-                                    allImages.add('$duplicateFilePath/$fileName');
-                                    await SPOperations.setUserImages(allImages);
+                                      List<String> allImages = await SPOperations.getUserImages();
+                                      allImages.add('$duplicateFilePath/$fileName');
+                                      await SPOperations.setUserImages(allImages);
 
-                                    getxController.userImages.value = allImages;
-                                    print(getxController.userImages.value);
-                                  }
-                                },
+                                      getxController.userImages.value = allImages;
+                                      print(getxController.userImages.value);
+                                    }
+                                  },
                                   child: Image.asset("assets/add_image_camera.png", height: 25,))
 
                             ],
@@ -168,7 +176,7 @@ class AddingPage extends StatelessWidget {
 
           for(String filePath in getxController.userImages.value){
             File file   =File(filePath);
-            var profileRef = FirebaseStorage.instance.ref("Images/HomeCategoriesContents/${whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
+            var profileRef = FirebaseStorage.instance.ref("Images/HomeCategoriesContents/${widget.whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
             await profileRef.putFile(file).whenComplete(() async{
               String url = await profileRef.getDownloadURL();
               imageList.add(url);
@@ -176,7 +184,7 @@ class AddingPage extends StatelessWidget {
           }
 
           print("before-----${imageList}");
-          Map<String,dynamic> userData = {"content":descTextEditController.text,"images":imageList, "path": whichCategory, "title" :titleTextEditController.text};
+          Map<String,dynamic> userData = {"content":descTextEditController.text,"images":imageList, "path": widget.whichCategory, "title" :titleTextEditController.text};
           await firebaseOperations.addUserData(userData);
           print("after-----${imageList}");
         },
@@ -193,10 +201,11 @@ class AddingPage extends StatelessWidget {
   Future<String> uploadImagetoStorage({required String filePath})async {
     File file   =File(filePath);
     String url="";
-    var profileRef = FirebaseStorage.instance.ref("userData${whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
+    var profileRef = FirebaseStorage.instance.ref("userData${widget.whichCategory.replaceAll(" ", "")}/gallery/${filePath.substring(filePath.length-23)}");
     await profileRef.putFile(file).whenComplete(() async{
       url = await profileRef.getDownloadURL();
     });
     return url;
   }
 }
+
