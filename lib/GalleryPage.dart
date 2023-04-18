@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:uni_tanitim/imageViewPage.dart';
 
-class ImageViewPage extends StatelessWidget {
+class GalleryPage extends StatelessWidget {
 
   late List<dynamic> galeriImage;
 
-  ImageViewPage({required this.galeriImage});
+  GalleryPage({required this.galeriImage});
 
 
   @override
@@ -33,7 +34,13 @@ class ImageViewPage extends StatelessWidget {
                       return Stack(
                         alignment: Alignment.bottomCenter,
                         children: [
-                          Image.network(galeriImage[index],fit: BoxFit.cover,),
+                          GestureDetector(
+                              child: Image.network(galeriImage[index],fit: BoxFit.cover,),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage[index])));
+                            },
+
+                          ),
                           //Text("shfsudfg",style: TextStyle(fontSize: 16,  decoration: TextDecoration.none, color: Colors.black)),
                         ],
                       );

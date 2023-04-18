@@ -182,11 +182,19 @@ class _AddingPage2State extends State<AddingPage2> {
               imageList.add(url);
             });
           }
-
-          print("before-----${imageList}");
           Map<String,dynamic> userData = {"content":descTextEditController.text,"images":imageList, "path": widget.whichCategory, "title" :titleTextEditController.text};
           await firebaseOperations.addUserData(userData);
-          print("after-----${imageList}");
+          Get.snackbar(
+            "Gönderiminiz için teşekkür ederiz!",
+            "",
+            messageText: Text("Küçük bir kontrolden sonra yayınlanacaktır.",style: TextStyle(fontFamily: "Quicksand", color: Colors.white, fontSize: 15)),
+            colorText: Colors.white,
+            backgroundColor: Color(0xae000000),);
+
+          descTextEditController.clear();
+          titleTextEditController.clear();
+          getxController.userImages.clear();
+
         },
         label: const Text('Gönder'),
         icon: const Icon(Icons.send_rounded),

@@ -15,7 +15,6 @@ class EExpandableWidget extends StatefulWidget {
 List<Color> colorList = [
   Color(0x83e71f64),
   Color(0x839b27ae),
-  Color(0x834051b4),
   Color(0x832396f4),
   Color(0x83019588),
   Color(0x838cc24c),
@@ -45,7 +44,7 @@ class _EExpandableWidgetState extends State<EExpandableWidget> {
                child: Container(
                  height: 75,
                  width: double.infinity,
-                 color: colorList[i%7],
+                 color: colorList[i%6],
                  child: Row(
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
@@ -69,8 +68,8 @@ class _EExpandableWidgetState extends State<EExpandableWidget> {
                        begin: Alignment.topCenter,
                        end: Alignment.bottomCenter,
                        colors: [
-                         colorList[i%7].withOpacity(0.2), // Start with opaque white
-                         colorList[i%7].withOpacity(0), // End with transparent white
+                         colorList[i%6].withOpacity(0.2), // Start with opaque white
+                         colorList[i%6].withOpacity(0), // End with transparent white
                        ],
                      ),
                    ),

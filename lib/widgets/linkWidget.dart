@@ -11,7 +11,7 @@ class LinkWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 12,right: 12,bottom: 12),
+      margin: EdgeInsets.only(left: 12,right: 12,bottom: 12,top: 12),
       child: Column(
         children: [
           Row(children: [
@@ -39,7 +39,7 @@ class LinkWidget extends StatelessWidget {
                   }
 
                 },
-                child: Text(link, style: TextStyle( fontSize: 16),overflow: TextOverflow.fade)
+                child: Text(link, style: TextStyle( fontSize: 16),overflow: TextOverflow.fade,maxLines: 1,)
 
                 ),
             ),

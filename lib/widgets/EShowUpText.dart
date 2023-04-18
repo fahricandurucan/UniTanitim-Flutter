@@ -11,6 +11,15 @@ class EShowUpText extends StatefulWidget {
   _EShowUpTextState createState() => _EShowUpTextState();
 }
 
+
+
+String encodedText(String text){
+  //text.replaceAll("\n", "_");
+  print(text.replaceAll("_", "\n"));
+  return text;
+}
+
+
 class _EShowUpTextState extends State<EShowUpText>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
@@ -37,7 +46,7 @@ class _EShowUpTextState extends State<EShowUpText>
           offset: Offset(0, _translateAnimation.value),
           child: Opacity(
             opacity: _opacityAnimation.value,
-            child: Text(widget.text,
+            child: Text(widget.text.toString().replaceAll("_", "\n"),
               style: TextStyle(fontSize: 18,color: Colors.black87,  decoration: TextDecoration.none, fontWeight: FontWeight.w300),
             ),
           ),

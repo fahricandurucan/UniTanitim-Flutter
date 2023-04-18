@@ -18,17 +18,18 @@ class ImageGridView extends StatelessWidget {
       return 0;
     }
   }
+  //List allImageList2 = getxController.userImages;
 
   @override
   Widget build(BuildContext context) {
-    List allImageList = getxController.userImages.value;
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      height: allImageList.length>0 ?(allImageList.length<=4? 100:200):0,
-      child: Obx((){
-        List allImageList2 = getxController.userImages;
-        print("---------- ${allImageList2}");
-        return GridView.builder(
+    //List allImageList = getxController.userImages.value;
+    return Obx(() {
+      List allImageList2 = getxController.userImages;
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 5),
+        height: allImageList2.length>0 ?(allImageList2.length<=4? 100:200):0,
+        child:
+        GridView.builder(
             scrollDirection: Axis.horizontal,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,//allImageList.length>4 ?2:1,
@@ -67,14 +68,15 @@ class ImageGridView extends StatelessWidget {
 
                       ],
                     ),
-                    ),
+                  ),
                 ),
               );
             }
-        );
-      }
-      ),
-    );
+        )
+
+    );} );
+
+
   }
 
 

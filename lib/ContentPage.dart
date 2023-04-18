@@ -8,7 +8,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:uni_tanitim/AddingPage.dart';
 import 'package:uni_tanitim/CommentsPage.dart';
 import 'package:uni_tanitim/FirebaseOperations.dart';
-import 'package:uni_tanitim/ImagesViewPage.dart';
+import 'package:uni_tanitim/GalleryPage.dart';
 import 'package:uni_tanitim/VideosViewPage.dart';
 import 'package:uni_tanitim/models/Content.dart';
 import 'package:uni_tanitim/widgets/EAnimatedImageWidget.dart';
@@ -38,6 +38,19 @@ class _ContentPageState extends State<ContentPage> {
   FirebaseOperations firebaseOperations = FirebaseOperations();
   GetxControllerClass getxController = Get.put(GetxControllerClass());
   var currentIndex = -1;
+
+
+
+  List girisIcerikler(){
+    List kategorilendirilmemisIcerikler=[];
+    for(var i in widget.category.contents){
+      if(i["title"].startsWith("#")){
+        break;
+      }
+      kategorilendirilmemisIcerikler.add(i);
+    }
+    return kategorilendirilmemisIcerikler;
+  }
 
 
 
@@ -116,7 +129,7 @@ class _ContentPageState extends State<ContentPage> {
                       ),
                       Flexible(child: GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewPage(galeriImage: widget.category.galleryImages,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>GalleryPage(galeriImage: widget.category.galleryImages,)));
                         },
                         child: Container(
                           height: 45,
@@ -132,8 +145,8 @@ class _ContentPageState extends State<ContentPage> {
                     ],
                   ),
 
-
-                  showContent(widget.category.contents.first),
+                  for(var i in girisIcerikler())
+                    showContent(i),
                   SizedBox(height: 30,),
                   EExpandableWidget(contentList()),
                   SizedBox(height: 30,),
